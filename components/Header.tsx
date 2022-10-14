@@ -89,13 +89,23 @@ export default function Header() {
                                     </a>
                                 ))}
                             </div>
-                            <div className="hidden md:absolute md:inset-y-0 md:right-0 md:flex md:items-center md:justify-end">
+                            <div className="hidden md:absolute md:inset-y-0 md:right-10 md:flex md:items-center md:justify-end">
                                 <span className="inline-flex rounded-md shadow">
                                     <a
                                         href="#"
                                         className="inline-flex items-center rounded-md border border-transparent bg-white px-4 py-2 text-base font-medium text-indigo-600 hover:bg-gray-50"
                                     >
                                         Log in
+                                    </a>
+                                </span>
+                            </div>
+                            <div className="hidden md:absolute md:inset-y-0 md:-right-10 md:flex md:items-center md:justify-end">
+                                <span className="inline-flex rounded-md shadow">
+                                    <a
+                                        href="#"
+                                        className="inline-flex items-center rounded-md border border-transparent bg-white px-4 py-2 text-base font-medium text-indigo-600 hover:bg-gray-50"
+                                    >
+                                        Sell
                                     </a>
                                 </span>
                             </div>
@@ -144,9 +154,15 @@ export default function Header() {
                                 </div>
                                 <a
                                     href="#"
-                                    className="block w-full bg-gray-50 px-5 py-3 text-center font-medium text-indigo-600 hover:bg-gray-100"
+                                    className=" inline-block w-1/2 bg-gray-50 px-5 py-3 text-center font-medium text-indigo-600 hover:bg-gray-100"
                                 >
                                     Log in
+                                </a>
+                                <a
+                                    href="#"
+                                    className="inline-block w-1/2 bg-gray-50 px-5 py-3 text-center font-medium text-indigo-600 hover:bg-gray-100"
+                                >
+                                    Sell
                                 </a>
                             </div>
                         </Popover.Panel>
