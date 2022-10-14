@@ -10,8 +10,35 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model User {
-  id      Int      @id @default(autoincrement())
-  name    String?  @db.VarChar(255)
-  email   String   @unique @db.VarChar(255)
+model Product {
+  id            Int      @id @default(autoincrement())
+  title         String?  @db.VarChar(255)
+  brand         String   @db.VarChar(255)
+  describtion   String   @db.VarChar(255)
+  price         String   @db.VarChar(255)
+  location      String   @db.VarChar(255)
+  type          String?  @db.VarChar(255)
+  area          String?  @db.VarChar(255)
+  bedrooms      String?  @db.VarChar(255)
+  bathrooms     String?  @db.VarChar(255)
+  baymentOption String?  @db.VarChar(255)
+  Furnished     Boolean?
 }
+
+// model Image {
+//   id     Int     @id @default(autoincrement())
+//   imgUrl String?
+//   email  String  @unique @db.VarChar(255)
+// }
+
+// model User {
+//   id    Int     @id @default(autoincrement())
+//   name  String? @db.VarChar(255)
+//   email String  @unique @db.VarChar(255)
+// }
+
+// model User {
+//   id    Int     @id @default(autoincrement())
+//   name  String? @db.VarChar(255)
+//   email String  @unique @db.VarChar(255)
+// }
