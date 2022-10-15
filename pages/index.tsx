@@ -1,14 +1,16 @@
 import type { NextPage } from 'next'
+import { useState } from 'react'
 import Advertise from '../components/Advertise'
 import Header from '../components/Header'
-import LogIn from '../components/LogIn'
+import LoginModel from '../components/LoginModel'
 
 const Home: NextPage = () => {
+  const [open, setOpen] = useState(false)
   return (
     <>
-      <LogIn/>
-      {/* <Header />
-      <Advertise /> */}
+      <Header setOpen={setOpen} />
+      <Advertise />
+      <LoginModel open={open} setOpen={setOpen} />
     </>
   )
 }

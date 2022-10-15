@@ -10,7 +10,7 @@ const navigation = [
     { name: 'Company', href: '#' },
 ]
 
-export default function Header() {
+export default function Header({ setOpen }: { setOpen: any }) {
     return (
         <div className="relative overflow-hidden bg-gray-50">
             <div className="hidden sm:absolute sm:inset-y-0 sm:block sm:h-full sm:w-full" aria-hidden="true">
@@ -89,24 +89,24 @@ export default function Header() {
                                     </a>
                                 ))}
                             </div>
-                            <div className="hidden md:absolute md:inset-y-0 md:right-10 md:flex md:items-center md:justify-end">
+                            <div className="hidden md:absolute md:inset-y-0 md:right-20 md:flex md:items-center md:justify-end">
                                 <span className="inline-flex rounded-md shadow">
-                                    <a
-                                        href="#"
+                                    <button
+                                        onClick={() => setOpen(true)}
                                         className="inline-flex items-center rounded-md border border-transparent bg-white px-4 py-2 text-base font-medium text-indigo-600 hover:bg-gray-50"
                                     >
                                         Log in
-                                    </a>
+                                    </button>
                                 </span>
                             </div>
-                            <div className="hidden md:absolute md:inset-y-0 md:-right-10 md:flex md:items-center md:justify-end">
+                            <div className="hidden md:absolute md:inset-y-0 md:-right-0 md:flex md:items-center md:justify-end">
                                 <span className="inline-flex rounded-md shadow">
-                                    <a
-                                        href="#"
+                                    <button
                                         className="inline-flex items-center rounded-md border border-transparent bg-white px-4 py-2 text-base font-medium text-indigo-600 hover:bg-gray-50"
+                                        onClick={() => setOpen(true)}
                                     >
-                                        Sell
-                                    </a>
+                                        Sell +
+                                    </button>
                                 </span>
                             </div>
                         </nav>
@@ -152,18 +152,19 @@ export default function Header() {
                                         </a>
                                     ))}
                                 </div>
-                                <a
-                                    href="#"
+                                <button
                                     className=" inline-block w-1/2 bg-gray-50 px-5 py-3 text-center font-medium text-indigo-600 hover:bg-gray-100"
+                                    onClick={() => setOpen(true)}
                                 >
                                     Log in
-                                </a>
-                                <a
-                                    href="#"
+                                </button>
+                                <button
                                     className="inline-block w-1/2 bg-gray-50 px-5 py-3 text-center font-medium text-indigo-600 hover:bg-gray-100"
+                                    onClick={() => setOpen(true)}
                                 >
                                     Sell
-                                </a>
+                                    
+                                </button>
                             </div>
                         </Popover.Panel>
                     </Transition>
