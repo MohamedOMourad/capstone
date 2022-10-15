@@ -1,7 +1,53 @@
 /* eslint-disable @next/next/no-img-element */
 import { useState } from "react";
+import { useFormik } from "formik";
+import * as Yup from "yup";
+
+const SignUpFormik = () => {
+    const formik = useFormik({
+        initialValues: {
+            firstName: "",
+            lastName: "",
+            email: "",
+            password: "",
+        },
+        validationSchema: Yup.object({
+            firstName: Yup.string().required("First Name is required!"),
+            lastName: Yup.string().required("Last Name is required!"),
+            email: Yup.string()
+                .email("Email is not valid!")
+                .required("Email is required!"),
+            password: Yup.string().required("Password is required!"),
+        }),
+        onSubmit: async (values) => {
+            console.log(values)
+            // formik.resetForm();
+        },
+    });
+    return formik;
+}
+const SignInFormik = () => {
+    const formik = useFormik({
+        initialValues: {
+            email: "",
+            password: "",
+        },
+        validationSchema: Yup.object({
+            email: Yup.string()
+                .email("Email is not valid!")
+                .required("Email is required!"),
+            password: Yup.string().required("Password is required!"),
+        }),
+        onSubmit: async (values) => {
+            console.log(values)
+            // formik.resetForm();
+        },
+    });
+    return formik;
+}
 
 const SignUp = () => {
+    const formik = SignUpFormik();
     return (
         <div className="bg-white py-8 px-4 sm:rounded-lg sm:px-10">
             <h1 className="text-center text-3xl">Create your account</h1>
@@ -10,26 +56,42 @@ const SignUp = () => {
                     <div className="mt-1">
                         <input
                             placeholder="First Name"
-                            id="email"
-                            name="email"
-                            type="email"
-                            autoComplete="email"
+                            id="firstName"
+                            name="firstName"
+                            value={formik.values.firstName}
+                            onBlur={formik.handleBlur}
+                            onChange={formik.handleChange}
+                            type="text"
+                            autoComplete="firstName"
                             required
                             className="block w-full appearance-none rounded-md border border-gray-300 px-3 py-2 placeholder-gray-400 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm"
                         />
+                        <p className="text-red-600">
+                            {formik.errors.firstName && formik.touched.firstName
+                                ? formik.errors.firstName
+                                : null}
+                        </p>
                     </div>
                 </div>
                 <div>
                     <div className="mt-1">
                         <input
                             placeholder="Last Name"
-                            id="email"
-                            name="email"
-                            type="email"
-                            autoComplete="email"
+                            id="lastName"
+                            name="lastName"
+                            value={formik.values.lastName}
+                            onBlur={formik.handleBlur}
+                            onChange={formik.handleChange}
+                            type="text"
+                            autoComplete="lastName"
                             required
                             className="block w-full appearance-none rounded-md border border-gray-300 px-3 py-2 placeholder-gray-400 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm"
                         />
+                        <p className="text-red-600">
+                            {formik.errors.lastName && formik.touched.lastName
+                                ? formik.errors.lastName
+                                : null}
+                        </p>
                     </div>
                 </div>
                 <div>
@@ -38,11 +100,19 @@ const SignUp = () => {
                             placeholder="Email"
                             id="email"
                             name="email"
+                            value={formik.values.email}
+                            onBlur={formik.handleBlur}
+                            onChange={formik.handleChange}
                             type="email"
                             autoComplete="email"
                             required
                             className="block w-full appearance-none rounded-md border border-gray-300 px-3 py-2 placeholder-gray-400 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm"
                         />
+                        <p className="text-red-600">
+                            {formik.errors.email && formik.touched.email
+                                ? formik.errors.email
+                                : null}
+                        </p>
                     </div>
                 </div>
 
@@ -52,17 +122,26 @@ const SignUp = () => {
                             placeholder="Password"
                             id="password"
                             name="password"
+                            value={formik.values.password}
+                            onBlur={formik.handleBlur}
+                            onChange={formik.handleChange}
                             type="password"
                             autoComplete="current-password"
                             required
                             className="block w-full appearance-none rounded-md border border-gray-300 px-3 py-2 placeholder-gray-400 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm"
                         />
+                        <p className="text-red-600">
+                            {formik.errors.password && formik.touched.password
+                                ? formik.errors.password
+                                : null}
+                        </p>
                     </div>
                 </div>
 
                 <div>
                     <button
-                        type="submit"
+                        type="button"
+                        onClick={() => formik.handleSubmit()}
                         className="flex w-full justify-center rounded-md border border-transparent bg-indigo-600 py-2 px-4 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
                     >
                         Sign Up
@@ -73,45 +152,59 @@ const SignUp = () => {
     )
 }
 const SignIn = () => {
+    const formik = SignInFormik()
     return (
         <div className="bg-white py-8 px-4 sm:rounded-lg sm:px-10">
             <h1 className="text-center text-3xl">Sign in to your account</h1>
             <form className="mt-5 space-y-6" action="#" method="POST">
                 <div>
-                    <label htmlFor="email" className="block text-sm font-medium text-gray-700">
-                        Email address
-                    </label>
                     <div className="mt-1">
                         <input
+                            placeholder="Email"
                             id="email"
                             name="email"
+                            value={formik.values.email}
+                            onBlur={formik.handleBlur}
+                            onChange={formik.handleChange}
                             type="email"
                             autoComplete="email"
                             required
                             className="block w-full appearance-none rounded-md border border-gray-300 px-3 py-2 placeholder-gray-400 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm"
                         />
+                        <p className="text-red-600">
+                            {formik.errors.email && formik.touched.email
+                                ? formik.errors.email
+                                : null}
+                        </p>
                     </div>
                 </div>
 
                 <div>
-                    <label htmlFor="password" className="block text-sm font-medium text-gray-700">
-                        Password
-                    </label>
                     <div className="mt-1">
                         <input
+                            placeholder="Password"
                             id="password"
                             name="password"
+                            value={formik.values.password}
+                            onBlur={formik.handleBlur}
+                            onChange={formik.handleChange}
                             type="password"
                             autoComplete="current-password"
                             required
                             className="block w-full appearance-none rounded-md border border-gray-300 px-3 py-2 placeholder-gray-400 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm"
                         />
+                        <p className="text-red-600">
+                            {formik.errors.password && formik.touched.password
+                                ? formik.errors.password
+                                : null}
+                        </p>
                     </div>
                 </div>
 
                 <div>
                     <button
-                        type="submit"
+                        type="button"
+                        onClick={() => formik.handleSubmit()}
                         className="flex w-full justify-center rounded-md border border-transparent bg-indigo-600 py-2 px-4 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
                     >
                         Sign in
