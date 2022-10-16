@@ -2,15 +2,21 @@
 import { Fragment } from 'react'
 import { Popover, Transition } from '@headlessui/react'
 import { Bars3Icon, XMarkIcon } from '@heroicons/react/24/outline'
+import Link from 'next/link'
+import { useUser } from '@supabase/auth-helpers-react';
 
 const navigation = [
-    { name: 'Product', href: '#' },
-    { name: 'Features', href: '#' },
-    { name: 'Marketplace', href: '#' },
-    { name: 'Company', href: '#' },
+    { name: 'Vehicles', href: '#' },
+    { name: 'Properties', href: '#' },
+    { name: 'Mobile Phones', href: '#' },
+    { name: 'Electronics', href: '#' },
+    { name: 'Furniture', href: '#' },
+    { name: 'Fashion & Beauty', href: '#' },
 ]
 
 export default function Header({ setOpen }: { setOpen: any }) {
+    const user = useUser();
+    console.log(user);
     return (
         <div className="relative overflow-hidden bg-gray-50">
             <div className="hidden sm:absolute sm:inset-y-0 sm:block sm:h-full sm:w-full" aria-hidden="true">
@@ -66,14 +72,16 @@ export default function Header({ setOpen }: { setOpen: any }) {
                         <nav className="relative flex items-center justify-between sm:h-10 md:justify-center" aria-label="Global">
                             <div className="flex flex-1 items-center md:absolute md:inset-y-0 md:left-0">
                                 <div className="flex w-full items-center justify-between md:w-auto">
-                                    <a href="#">
-                                        <span className="sr-only">Your Company</span>
-                                        <img
-                                            className="h-8 w-auto sm:h-10"
-                                            src="https://tailwindui.com/img/logos/mark.svg?color=indigo&shade=600"
-                                            alt=""
-                                        />
-                                    </a>
+                                    <Link href="/">
+                                        <a>
+                                            <span className="sr-only">Your Company</span>
+                                            <img
+                                                className="h-8 w-auto sm:h-10"
+                                                src="https://tailwindui.com/img/logos/mark.svg?color=indigo&shade=600"
+                                                alt=""
+                                            />
+                                        </a>
+                                    </Link>
                                     <div className="-mr-2 flex items-center md:hidden">
                                         <Popover.Button className="inline-flex items-center justify-center rounded-md bg-gray-50 p-2 text-gray-400 hover:bg-gray-100 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-indigo-500">
                                             <span className="sr-only">Open main menu</span>
@@ -82,14 +90,14 @@ export default function Header({ setOpen }: { setOpen: any }) {
                                     </div>
                                 </div>
                             </div>
-                            <div className="hidden md:flex md:space-x-10">
+                            <div className="hidden md:flex md:space-x-5">
                                 {navigation.map((item) => (
                                     <a key={item.name} href={item.href} className="font-medium text-gray-500 hover:text-gray-900">
                                         {item.name}
                                     </a>
                                 ))}
                             </div>
-                            <div className="hidden md:absolute md:inset-y-0 md:right-20 md:flex md:items-center md:justify-end">
+                            {user === null && <div className="hidden md:absolute md:inset-y-0 md:right-20 md:flex md:items-center md:justify-end">
                                 <span className="inline-flex rounded-md shadow">
                                     <button
                                         onClick={() => setOpen(true)}
@@ -98,7 +106,7 @@ export default function Header({ setOpen }: { setOpen: any }) {
                                         Log in
                                     </button>
                                 </span>
-                            </div>
+                            </div>}
                             <div className="hidden md:absolute md:inset-y-0 md:-right-0 md:flex md:items-center md:justify-end">
                                 <span className="inline-flex rounded-md shadow">
                                     <button
@@ -163,7 +171,7 @@ export default function Header({ setOpen }: { setOpen: any }) {
                                     onClick={() => setOpen(true)}
                                 >
                                     Sell
-                                    
+
                                 </button>
                             </div>
                         </Popover.Panel>
@@ -172,30 +180,36 @@ export default function Header({ setOpen }: { setOpen: any }) {
 
                 <main className="mx-auto mt-16 max-w-7xl px-4 sm:mt-24">
                     <div className="text-center">
-                        <h1 className="text-4xl font-bold tracking-tight text-gray-900 sm:text-5xl md:text-6xl">
-                            <span className="block xl:inline">Data to enrich your</span>{' '}
-                            <span className="block text-indigo-600 xl:inline">online business</span>
-                        </h1>
-                        <p className="mx-auto mt-3 max-w-md text-base text-gray-500 sm:text-lg md:mt-5 md:max-w-3xl md:text-xl">
-                            Anim aute id magna aliqua ad ad non deserunt sunt. Qui irure qui lorem cupidatat commodo. Elit sunt amet
-                            fugiat veniam occaecat fugiat aliqua.
-                        </p>
-                        <div className="mx-auto mt-5 max-w-md sm:flex sm:justify-center md:mt-8">
-                            <div className="rounded-md shadow">
-                                <a
-                                    href="#"
-                                    className="flex w-full items-center justify-center rounded-md border border-transparent bg-indigo-600 px-8 py-3 text-base font-medium text-white hover:bg-indigo-700 md:py-4 md:px-10 md:text-lg"
+                        <div className="bg-white lg:max-w-[384px] md:max-w-[720px] w-full shadow rounded mx-auto px-6 ">
+                            <div className=" flex justify-start items-center py-7 relative">
+                                <input
+                                    className="text-sm leading-none text-left text-gray-600 px-4 py-3 w-full border rounded border-gray-300  outline-none"
+                                    type="text"
+                                    placeholder="Search"
+                                />
+                                <svg
+                                    className="absolute right-3 z-10 cursor-pointer"
+                                    width={24}
+                                    height={24}
+                                    viewBox="0 0 24 24"
+                                    fill="none"
+                                    xmlns="http://www.w3.org/2000/svg"
                                 >
-                                    Get started
-                                </a>
-                            </div>
-                            <div className="mt-3 rounded-md shadow sm:mt-0 sm:ml-3">
-                                <a
-                                    href="#"
-                                    className="flex w-full items-center justify-center rounded-md border border-transparent bg-white px-8 py-3 text-base font-medium text-indigo-600 hover:bg-gray-50 md:py-4 md:px-10 md:text-lg"
-                                >
-                                    Live demo
-                                </a>
+                                    <path
+                                        d="M10 17C13.866 17 17 13.866 17 10C17 6.13401 13.866 3 10 3C6.13401 3 3 6.13401 3 10C3 13.866 6.13401 17 10 17Z"
+                                        stroke="#4B5563"
+                                        strokeWidth="1.66667"
+                                        strokeLinecap="round"
+                                        strokeLinejoin="round"
+                                    />
+                                    <path
+                                        d="M21 21L15 15"
+                                        stroke="#4B5563"
+                                        strokeWidth="1.66667"
+                                        strokeLinecap="round"
+                                        strokeLinejoin="round"
+                                    />
+                                </svg>
                             </div>
                         </div>
                     </div>

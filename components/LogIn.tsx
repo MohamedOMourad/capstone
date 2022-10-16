@@ -1,9 +1,12 @@
 /* eslint-disable @next/next/no-img-element */
-import { useState } from "react";
 import { useFormik } from "formik";
 import * as Yup from "yup";
+import { useUser, useSessionContext } from '@supabase/auth-helpers-react';
+import { useEffect, useState } from 'react';
 
 const SignUpFormik = () => {
+    const { isLoading, session, error, supabaseClient } = useSessionContext();
+    const user = useUser();
     const formik = useFormik({
         initialValues: {
             firstName: "",
@@ -21,12 +24,18 @@ const SignUpFormik = () => {
         }),
         onSubmit: async (values) => {
             console.log(values)
+            const res = await supabaseClient.auth.signUp({
+                email: values.email,
+                password: values.password,
+            })
             // formik.resetForm();
         },
     });
     return formik;
 }
 const SignInFormik = () => {
+    const { isLoading, session, error, supabaseClient } = useSessionContext();
+    const user = useUser();
     const formik = useFormik({
         initialValues: {
             email: "",
@@ -39,7 +48,10 @@ const SignInFormik = () => {
             password: Yup.string().required("Password is required!"),
         }),
         onSubmit: async (values) => {
+            const res = await supabaseClient.auth.signInWithPassword({ email: values.email, password: values.password})
             console.log(values)
+            console.log(res)
+
             // formik.resetForm();
         },
     });
