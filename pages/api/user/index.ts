@@ -35,5 +35,4 @@ export default async function handler(
         default:
             res.status(500).json({ message: "Wrong End Point!" })
     }
-
 }
