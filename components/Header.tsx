@@ -90,12 +90,35 @@ export default function Header({ setOpen }: { setOpen: any }) {
                                     </div>
                                 </div>
                             </div>
-                            <div className="hidden md:flex md:space-x-5">
-                                {navigation.map((item) => (
-                                    <a key={item.name} href={item.href} className="font-medium text-gray-500 hover:text-gray-900">
-                                        {item.name}
-                                    </a>
-                                ))}
+                            <div className=" flex justify-start items-center py-7 relative">
+                                <input
+                                    className="text-sm leading-none text-left text-gray-600 px-4 py-3 w-full border rounded border-gray-300  outline-none"
+                                    type="text"
+                                    placeholder="Search"
+                                />
+                                <svg
+                                    className="absolute right-3 z-10 cursor-pointer"
+                                    width={24}
+                                    height={24}
+                                    viewBox="0 0 24 24"
+                                    fill="none"
+                                    xmlns="http://www.w3.org/2000/svg"
+                                >
+                                    <path
+                                        d="M10 17C13.866 17 17 13.866 17 10C17 6.13401 13.866 3 10 3C6.13401 3 3 6.13401 3 10C3 13.866 6.13401 17 10 17Z"
+                                        stroke="#4B5563"
+                                        strokeWidth="1.66667"
+                                        strokeLinecap="round"
+                                        strokeLinejoin="round"
+                                    />
+                                    <path
+                                        d="M21 21L15 15"
+                                        stroke="#4B5563"
+                                        strokeWidth="1.66667"
+                                        strokeLinecap="round"
+                                        strokeLinejoin="round"
+                                    />
+                                </svg>
                             </div>
                             {user === null && <div className="hidden md:absolute md:inset-y-0 md:right-20 md:flex md:items-center md:justify-end">
                                 <span className="inline-flex rounded-md shadow">
@@ -109,12 +132,23 @@ export default function Header({ setOpen }: { setOpen: any }) {
                             </div>}
                             <div className="hidden md:absolute md:inset-y-0 md:-right-0 md:flex md:items-center md:justify-end">
                                 <span className="inline-flex rounded-md shadow">
-                                    <button
-                                        className="inline-flex items-center rounded-md border border-transparent bg-white px-4 py-2 text-base font-medium text-indigo-600 hover:bg-gray-50"
-                                        onClick={() => setOpen(true)}
-                                    >
-                                        Sell +
-                                    </button>
+                                    {user ?
+                                        <Link href='/post'>
+                                            <a
+                                                className="inline-flex items-center rounded-md border border-transparent bg-white px-4 py-2 text-base font-medium text-indigo-600 hover:bg-gray-50"
+                                            >
+                                                + Sell
+                                            </a>
+                                        </Link>
+                                        :
+                                        <button
+                                            className="inline-flex items-center rounded-md border border-transparent bg-white px-4 py-2 text-base font-medium text-indigo-600 hover:bg-gray-50"
+                                            onClick={() => setOpen(true)}
+                                        >
+                                            + Sell
+                                        </button>
+                                    }
+
                                 </span>
                             </div>
                         </nav>
@@ -170,51 +204,33 @@ export default function Header({ setOpen }: { setOpen: any }) {
                                     className="inline-block w-1/2 bg-gray-50 px-5 py-3 text-center font-medium text-indigo-600 hover:bg-gray-100"
                                     onClick={() => setOpen(true)}
                                 >
-                                    Sell
+                                    +Sell
 
                                 </button>
                             </div>
                         </Popover.Panel>
                     </Transition>
                 </Popover>
-
-                <main className="mx-auto mt-16 max-w-7xl px-4 sm:mt-24">
-                    <div className="text-center">
-                        <div className="bg-white lg:max-w-[384px] md:max-w-[720px] w-full shadow rounded mx-auto px-6 ">
-                            <div className=" flex justify-start items-center py-7 relative">
-                                <input
-                                    className="text-sm leading-none text-left text-gray-600 px-4 py-3 w-full border rounded border-gray-300  outline-none"
-                                    type="text"
-                                    placeholder="Search"
-                                />
-                                <svg
-                                    className="absolute right-3 z-10 cursor-pointer"
-                                    width={24}
-                                    height={24}
-                                    viewBox="0 0 24 24"
-                                    fill="none"
-                                    xmlns="http://www.w3.org/2000/svg"
-                                >
-                                    <path
-                                        d="M10 17C13.866 17 17 13.866 17 10C17 6.13401 13.866 3 10 3C6.13401 3 3 6.13401 3 10C3 13.866 6.13401 17 10 17Z"
-                                        stroke="#4B5563"
-                                        strokeWidth="1.66667"
-                                        strokeLinecap="round"
-                                        strokeLinejoin="round"
-                                    />
-                                    <path
-                                        d="M21 21L15 15"
-                                        stroke="#4B5563"
-                                        strokeWidth="1.66667"
-                                        strokeLinecap="round"
-                                        strokeLinejoin="round"
-                                    />
-                                </svg>
+                <div className='bg-white'>
+                    <div className="flex w-full items-center justify-center  py-3 lg:border-none">
+                        <div className="flex items-center">
+                            <div className="ml-10 hidden space-x-8 lg:block">
+                                {navigation.map((link) => (
+                                    <a key={link.name} href={link.href} className="text-base font-medium">
+                                        {link.name}
+                                    </a>
+                                ))}
                             </div>
                         </div>
                     </div>
+                </div>
+                <main className="mx-auto mt-16 max-w-7xl px-4 sm:mt-24">
+                    <div className="text-center">
+
+                    </div>
                 </main>
-            </div>
-        </div>
+            </div >
+
+        </div >
     )
 }
