@@ -1,12 +1,19 @@
+import { Product } from "@prisma/client";
 import { NextApiRequest, NextApiResponse } from "next";
 import { prisma } from '../../../lib/prisma';
 
+type data = {
+    message?: string;
+    error?: string;
+    errors?: { error: string }[];
+    product?: Product,
+}
 export default async function handler(
     req: NextApiRequest,
-    res: NextApiResponse
+    res: NextApiResponse<data>
 ) {
     try {
-        const { title, brand, description, price, images, location } = req.body
+        const { title, brand, description, images, price, location } = req.body
         switch (req.method) {
             case 'POST':
                 const product = await prisma?.product.create({
@@ -15,7 +22,9 @@ export default async function handler(
                         brand,
                         description,
                         price,
-                        location
+                        location,
+                        categoryId: 1,
+                        userId: '1'
                     }
                 })
         }

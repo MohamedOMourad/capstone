@@ -15,7 +15,7 @@ model User {
   email       String    @unique @db.VarChar(255)
   firstName   String    @db.VarChar(255)
   lastName    String    @db.VarChar(255)
-  phoneNumber String    @db.VarChar(255)
+  phoneNumber String?    @db.VarChar(255)
   product     Product[]
 }
 
@@ -34,25 +34,25 @@ model Category {
 // }
 
 model Product {
-  id            Int      @id @default(autoincrement())
-  title         String   @db.VarChar(255)
-  brand         String   @db.VarChar(255)
-  description   String   @db.VarChar(255)
-  price         String   @db.VarChar(255)
-  location      String   @db.VarChar(255)
-  createdAt     DateTime @default(now())
-  updatedAt     DateTime @default(now())
-  type          String?  @db.VarChar(255)
-  area          String?  @db.VarChar(255)
-  bedrooms      String?  @db.VarChar(255)
-  bathrooms     String?  @db.VarChar(255)
-  baymentOption String?  @db.VarChar(255)
+  id            Int       @id @default(autoincrement())
+  title         String    @db.VarChar(255)
+  brand         String    @db.VarChar(255)
+  description   String    @db.VarChar(255)
+  price         String    @db.VarChar(255)
+  location      String    @db.VarChar(255)
+  createdAt     DateTime? @default(now())
+  updatedAt     DateTime? @default(now())
+  type          String?   @db.VarChar(255)
+  area          String?   @db.VarChar(255)
+  bedrooms      String?   @db.VarChar(255)
+  bathrooms     String?   @db.VarChar(255)
+  baymentOption String?   @db.VarChar(255)
   Furnished     Boolean?
   images        Image[]
-  categroyId    Int
-  category      Category @relation(fields: [categroyId], references: [id])
+  categoryId    Int
+  category      Category  @relation(fields: [categoryId], references: [id])
   userId        String
-  user          User     @relation(fields: [userId], references: [id])
+  user          User      @relation(fields: [userId], references: [id])
 }
 
 model Image {
