@@ -20,39 +20,39 @@ model User {
 }
 
 model Category {
-  id          Int           @id @default(autoincrement())
-  name        String?       @db.VarChar(255)
-  subCategory SubCategory[]
+  id      Int       @id @default(autoincrement())
+  name    String?   @db.VarChar(255)
+  product Product[]
 }
 
-model SubCategory {
-  id         Int       @id @default(autoincrement())
-  name       String?   @db.VarChar(255)
-  categoryId Int
-  category   Category  @relation(fields: [categoryId], references: [id])
-  product    Product[]
-}
+// model SubCategory {
+//   id         Int       @id @default(autoincrement())
+//   name       String?   @db.VarChar(255)
+//   categoryId Int
+//   category   Category  @relation(fields: [categoryId], references: [id])
+//   product    Product[]
+// }
 
 model Product {
-  id            Int         @id @default(autoincrement())
-  title         String      @db.VarChar(255)
-  brand         String      @db.VarChar(255)
-  describtion   String      @db.VarChar(255)
-  price         String      @db.VarChar(255)
-  location      String      @db.VarChar(255)
-  createdAt     DateTime    @default(now())
-  updatedAt     DateTime    @default(now())
-  type          String?     @db.VarChar(255)
-  area          String?     @db.VarChar(255)
-  bedrooms      String?     @db.VarChar(255)
-  bathrooms     String?     @db.VarChar(255)
-  baymentOption String?     @db.VarChar(255)
+  id            Int      @id @default(autoincrement())
+  title         String   @db.VarChar(255)
+  brand         String   @db.VarChar(255)
+  description   String   @db.VarChar(255)
+  price         String   @db.VarChar(255)
+  location      String   @db.VarChar(255)
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @default(now())
+  type          String?  @db.VarChar(255)
+  area          String?  @db.VarChar(255)
+  bedrooms      String?  @db.VarChar(255)
+  bathrooms     String?  @db.VarChar(255)
+  baymentOption String?  @db.VarChar(255)
   Furnished     Boolean?
-  image         Image[]
-  subCategroyId Int
-  subCategory   SubCategory @relation(fields: [subCategroyId], references: [id])
+  images        Image[]
+  categroyId    Int
+  category      Category @relation(fields: [categroyId], references: [id])
   userId        String
-  user          User        @relation(fields: [userId], references: [id])
+  user          User     @relation(fields: [userId], references: [id])
 }
 
 model Image {
