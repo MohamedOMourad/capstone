@@ -18,15 +18,17 @@ export default async function handler(
                 if (error.length > 0) {
                     return res.status(400).json({ error })
                 }
-                const { id, email, firstName, lastName }: User = req.body
+                const { id, email, password, firstName, lastName }: User = req.body
                 const user = await prisma.user.create({
                     data: {
                         id,
                         email,
                         firstName,
                         lastName,
+                        password
                     }
                 })
+                res.status(200).json({ user })
             } catch (error) {
                 console.log(error)
                 res.status(500).json({ message: "Server Is Down!" })

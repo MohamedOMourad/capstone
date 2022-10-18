@@ -1,18 +1,21 @@
 /* eslint-disable @next/next/no-img-element */
 import { useFormik } from "formik";
 import * as Yup from "yup";
-import { useUser, useSessionContext } from '@supabase/auth-helpers-react';
-import { useEffect, useState } from 'react';
+import { useSessionContext, useUser } from '@supabase/auth-helpers-react';
+import { useState } from 'react';
+import { createUSer } from "../utils/API";
 
 const SignUpFormik = () => {
-    const { isLoading, session, error, supabaseClient } = useSessionContext();
+    const { supabaseClient } = useSessionContext();
     const user = useUser();
     const formik = useFormik({
         initialValues: {
-            firstName: "",
-            lastName: "",
-            email: "",
-            password: "",
+            id: '',
+            firstName: '',
+            lastName: '',
+            email: '',
+            password: '',
+            phoneNumber: ''
         },
         validationSchema: Yup.object({
             firstName: Yup.string().required("First Name is required!"),
@@ -23,18 +26,14 @@ const SignUpFormik = () => {
             password: Yup.string().required("Password is required!"),
         }),
         onSubmit: async (values) => {
-            console.log(values)
-            const res = await supabaseClient.auth.signUp({
-                email: values.email,
-                password: values.password,
-            })
+            await createUSer(values, supabaseClient)
             // formik.resetForm();
         },
     });
     return formik;
 }
+
 const SignInFormik = () => {
-    const { isLoading, session, error, supabaseClient } = useSessionContext();
     const user = useUser();
     const formik = useFormik({
         initialValues: {
@@ -48,10 +47,8 @@ const SignInFormik = () => {
             password: Yup.string().required("Password is required!"),
         }),
         onSubmit: async (values) => {
-            const res = await supabaseClient.auth.signInWithPassword({ email: values.email, password: values.password})
-            console.log(values)
-            console.log(res)
 
+            console.log(values)
             // formik.resetForm();
         },
     });
