@@ -12,14 +12,14 @@ function MyApp({ Component, pageProps }: AppProps<{ initialSession: Session }>) 
       supabaseClient={supabaseClient}
       initialSession={pageProps.initialSession}
     >
-      {/* <button
+      <button
         onClick={async () => {
           await supabaseClient.auth.signOut();
           router.push('/');
         }}
       >
         Logout
-      </button> */}
+      </button>
 
       <Component {...pageProps} />
     </SessionContextProvider>

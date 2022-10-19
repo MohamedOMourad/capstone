@@ -4,6 +4,7 @@ import Advertise from '../components/Advertise'
 import Footer from '../components/Footer'
 import Header from '../components/Header'
 import LoginModel from '../components/LoginModel'
+import Vehicle from '../components/Vechial'
 
 const Home: NextPage = () => {
   const [open, setOpen] = useState(false)
@@ -12,7 +13,8 @@ const Home: NextPage = () => {
       <Header setOpen={setOpen} />
       <Advertise />
       <LoginModel open={open} setOpen={setOpen} />
-      <Footer/>
+      <Footer />
+      {/* <Vehicle/> */}
     </>
   )
 }

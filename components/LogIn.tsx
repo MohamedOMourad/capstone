@@ -2,11 +2,14 @@
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import { useSessionContext, useUser } from '@supabase/auth-helpers-react';
-import { useState } from 'react';
+import { Dispatch, SetStateAction, useState } from 'react';
 import { createUSer } from "../utils/API";
+import { useRouter } from "next/router";
+import Email from "next-auth/providers/email";
 
 const SignUpFormik = () => {
     const { supabaseClient } = useSessionContext();
+    const router = useRouter()
     const user = useUser();
     const formik = useFormik({
         initialValues: {
@@ -27,13 +30,16 @@ const SignUpFormik = () => {
         }),
         onSubmit: async (values) => {
             await createUSer(values, supabaseClient)
-            // formik.resetForm();
+            formik.resetForm();
+            router.push('/')
         },
     });
     return formik;
 }
 
 const SignInFormik = () => {
+    const { supabaseClient } = useSessionContext();
+    const router = useRouter()
     const user = useUser();
     const formik = useFormik({
         initialValues: {
@@ -47,15 +53,17 @@ const SignInFormik = () => {
             password: Yup.string().required("Password is required!"),
         }),
         onSubmit: async (values) => {
-
-            console.log(values)
+            const credentials = { ...values }
+            const res = await supabaseClient.auth.signInWithPassword(credentials)
+            console.log(res);
             // formik.resetForm();
+            router.push('/')
         },
     });
     return formik;
 }
 
-const SignUp = () => {
+const SignUp = ({ setOpen }: { setOpen: Dispatch<SetStateAction<boolean>> }) => {
     const formik = SignUpFormik();
     return (
         <div className="bg-white py-8 px-4 sm:rounded-lg sm:px-10">
@@ -150,7 +158,11 @@ const SignUp = () => {
                 <div>
                     <button
                         type="button"
-                        onClick={() => formik.handleSubmit()}
+                        onClick={() => {
+                            formik.handleSubmit(),
+                                setOpen(false)
+                        }
+                        }
                         className="flex w-full justify-center rounded-md border border-transparent bg-indigo-600 py-2 px-4 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
                     >
                         Sign Up
@@ -160,7 +172,7 @@ const SignUp = () => {
         </div>
     )
 }
-const SignIn = () => {
+const SignIn = ({ setOpen }: { setOpen: Dispatch<SetStateAction<boolean>> }) => {
     const formik = SignInFormik()
     return (
         <div className="bg-white py-8 px-4 sm:rounded-lg sm:px-10">
@@ -213,7 +225,11 @@ const SignIn = () => {
                 <div>
                     <button
                         type="button"
-                        onClick={() => formik.handleSubmit()}
+                        onClick={() => {
+                            formik.handleSubmit(),
+                                setOpen(false)
+                        }
+                        }
                         className="flex w-full justify-center rounded-md border border-transparent bg-indigo-600 py-2 px-4 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
                     >
                         Sign in
@@ -224,7 +240,7 @@ const SignIn = () => {
     )
 }
 
-export default function LogIn() {
+export default function LogIn({ setOpen }: { setOpen: Dispatch<SetStateAction<boolean>> }) {
     const [signUp, setSignUp] = useState({ registered: true, class: "font-bold" })
     const [signIn, setSignIn] = useState({ registered: false, class: "bg-gray-100" })
 
@@ -252,8 +268,8 @@ export default function LogIn() {
                         <div onClick={() => toggle("signUp")} className={`w-1/2  p-5 ${signUp.class} cursor-pointer`}>SIGN UP</div>
                         <div onClick={() => toggle("signIn")} className={`w-1/2  p-5 ${signIn.class} cursor-pointer`}>SIGN IN</div>
                     </div>
-                    {signUp.registered && <SignUp />}
-                    {signIn.registered && <SignIn />}
+                    {signUp.registered && <SignUp setOpen={setOpen} />}
+                    {signIn.registered && <SignIn setOpen={setOpen} />}
                     <div className="mt-1 px-4 sm:px-6 lg:px-10">
                         <div className="relative">
                             <div className="absolute inset-0 flex items-center">

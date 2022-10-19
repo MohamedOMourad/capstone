@@ -16,6 +16,8 @@
 import { Dispatch, Fragment, SetStateAction, useState } from 'react'
 import { Popover, Transition } from '@headlessui/react'
 import { Bars3Icon, XMarkIcon, } from '@heroicons/react/24/outline'
+import { useUser } from '@supabase/auth-helpers-react'
+import { useRouter } from 'next/router'
 
 const navigation = [
     { name: 'Vehicles', href: '#', activeStatus: 0 },
@@ -131,6 +133,8 @@ const HeroSection = () => {
 }
 
 export default function Header({ setOpen }: { setOpen: Dispatch<SetStateAction<boolean>> }) {
+    const router = useRouter()
+    const user = useUser();
     return (
         <>
             <div className="bg-white">
@@ -163,15 +167,22 @@ export default function Header({ setOpen }: { setOpen: Dispatch<SetStateAction<b
                             </Popover.Group>
                             {/* login */}
                             <div className="hidden items-center justify-end md:flex md:flex-1 lg:w-0">
-                                <button onClick={() => setOpen(true)} className="whitespace-nowrap text-base font-medium text-gray-500 hover:text-gray-900">
+                                {!user && <button onClick={() => setOpen(true)} className="whitespace-nowrap text-base font-medium text-gray-500 hover:text-gray-900">
                                     Sign in
-                                </button>
-                                <button
+                                </button>}
+                                {!user ? <button
                                     onClick={() => setOpen(true)}
                                     className="ml-8 inline-flex items-center justify-center whitespace-nowrap rounded-md border border-transparent bg-gradient-to-r from-purple-600 to-indigo-600 bg-origin-border px-4 py-2 text-base font-medium text-white shadow-sm hover:from-purple-700 hover:to-indigo-700"
                                 >
                                     + SELL
-                                </button>
+                                </button> :
+                                    <button
+                                        onClick={() => router.push('/post')}
+                                        className="ml-8 inline-flex items-center justify-center whitespace-nowrap rounded-md border border-transparent bg-gradient-to-r from-purple-600 to-indigo-600 bg-origin-border px-4 py-2 text-base font-medium text-white shadow-sm hover:from-purple-700 hover:to-indigo-700"
+                                    >
+                                        + SELL
+                                    </button>
+                                }
                             </div>
                         </div>
 
