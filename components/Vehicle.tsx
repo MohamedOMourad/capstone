@@ -1,26 +1,33 @@
-import { Fragment, useState } from 'react'
-import { Dialog, Listbox, Transition } from '@headlessui/react'
+import { Dispatch, Fragment, SetStateAction, useState } from 'react'
+import { Listbox, Transition } from '@headlessui/react'
 import { CheckIcon, ChevronUpDownIcon } from '@heroicons/react/20/solid'
-import { Bars3Icon, XMarkIcon, } from '@heroicons/react/24/outline'
-import { CarBrand } from '../constant/vehical'
-import { classNames, navigation, location } from '../constant'
+import { CarBrand } from '../constant/vehicle'
+import { classNames, location } from '../constant'
 import UserDetails from './UserDetails'
+import { useFormik } from 'formik'
+import * as Yup from "yup";
 
-function VehiclesBrand() {
-    const [selected, setSelected] = useState(CarBrand[0])
+
+function VehiclesBrand({ brand, setBrand }: {
+    brand: { id: number, name: string } | undefined,
+    setBrand: Dispatch<SetStateAction<{
+        id: number;
+        name: string;
+    } | undefined>>
+}
+) {
     return (
-        <Listbox value={selected} onChange={setSelected}>
+        <Listbox value={brand} onChange={setBrand}>
             {({ open }) => (
                 <>
                     <Listbox.Label className="block text-sm font-medium text-gray-700">Brand</Listbox.Label>
                     <div className="relative mt-1">
                         <Listbox.Button className="relative w-full cursor-default rounded-md border border-gray-300 bg-white py-2 pl-3 pr-10 text-left shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500 sm:text-sm">
-                            <span className="block truncate">{selected.name}</span>
+                            <span className="block truncate">{!brand?.name ? 'select' : brand?.name}</span>
                             <span className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-2">
                                 <ChevronUpDownIcon className="h-5 w-5 text-gray-400" aria-hidden="true" />
                             </span>
                         </Listbox.Button>
-
                         <Transition
                             show={open}
                             as={Fragment}
@@ -40,24 +47,9 @@ function VehiclesBrand() {
                                         }
                                         value={car}
                                     >
-                                        {({ selected, active }) => (
-                                            <>
-                                                <span className={classNames(selected ? 'font-semibold' : 'font-normal', 'block truncate')}>
-                                                    {car.name}
-                                                </span>
-
-                                                {selected ? (
-                                                    <span
-                                                        className={classNames(
-                                                            active ? 'text-white' : 'text-indigo-600',
-                                                            'absolute inset-y-0 right-0 flex items-center pr-4'
-                                                        )}
-                                                    >
-                                                        <CheckIcon className="h-5 w-5" aria-hidden="true" />
-                                                    </span>
-                                                ) : null}
-                                            </>
-                                        )}
+                                        <span className='font-norma'>
+                                            {car.name}
+                                        </span>
                                     </Listbox.Option>
                                 ))}
                             </Listbox.Options>
@@ -68,16 +60,18 @@ function VehiclesBrand() {
         </Listbox>
     )
 }
-function Location() {
-    const [selected, setSelected] = useState(location[0])
+function Location({ selectedLocation, setSelectedLocation }: {
+    selectedLocation: { id: number, name: string } | undefined,
+    setSelectedLocation: any
+}) {
     return (
-        <Listbox value={selected} onChange={setSelected}>
+        <Listbox value={location} onChange={setSelectedLocation}>
             {({ open }) => (
                 <>
                     <Listbox.Label className="block text-sm font-medium mt-8">Location</Listbox.Label>
                     <div className="relative mt-1">
                         <Listbox.Button className="relative w-full cursor-default rounded-md border border-gray-300 bg-white py-2 pl-3 pr-10 text-left shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500 sm:text-sm">
-                            <span className="block truncate">{selected.name}</span>
+                            <span className="block truncate">{!selectedLocation?.name ? 'select' : selectedLocation?.name}</span>
                             <span className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-2">
                                 <ChevronUpDownIcon className="h-5 w-5 text-gray-400" aria-hidden="true" />
                             </span>
@@ -102,24 +96,9 @@ function Location() {
                                         }
                                         value={loc}
                                     >
-                                        {({ selected, active }) => (
-                                            <>
-                                                <span className={classNames(selected ? 'font-semibold' : 'font-normal', 'block truncate')}>
-                                                    {loc.name}
-                                                </span>
-
-                                                {selected ? (
-                                                    <span
-                                                        className={classNames(
-                                                            active ? 'text-white' : 'text-indigo-600',
-                                                            'absolute inset-y-0 right-0 flex items-center pr-4'
-                                                        )}
-                                                    >
-                                                        <CheckIcon className="h-5 w-5" aria-hidden="true" />
-                                                    </span>
-                                                ) : null}
-                                            </>
-                                        )}
+                                        <span className='font-normal'>
+                                            {loc.name}
+                                        </span>
                                     </Listbox.Option>
                                 ))}
                             </Listbox.Options>
@@ -155,6 +134,35 @@ function UploadPhoto() {
     )
 }
 export default function Vehicle() {
+    const [brand, setBrand] = useState<{ id: number, name: string }>();
+    const [selectedLocation, setSelectedLocation] = useState<{ id: number, name: string }>();
+    const [required, setRequired] = useState(false);
+
+    const formik = useFormik({
+        initialValues: {
+            title: '',
+            brand: brand?.name,
+            description: '',
+            price: '',
+            imgUrl: [],
+            location: '',
+            phoneNumber: '',
+            categoryId: 1,
+            userId: ''
+        },
+        validationSchema: Yup.object({
+            title: Yup.string().required('required'),
+            brand: Yup.string().required('required'),
+            description: Yup.string().required('required'),
+            price: Yup.string().required('required'),
+            imgUrl: Yup.string().required('required'),
+            location: Yup.string().required('required'),
+            phoneNumber: Yup.string().required('required')
+        }),
+        onSubmit: async (values) => {
+            console.log(values);
+        }
+    })
     return (
         <form>
             <h1>INCLUDE SOME DETAILS</h1>
@@ -163,26 +171,45 @@ export default function Vehicle() {
                     <div className="mx-auto">
                         <div className="w-full mx-auto xl:mx-0">
                             <div className="mt-8 flex flex-col xl:w-2/6 lg:w-1/2 md:w-1/2 w-full">
-                                <label htmlFor="username" className="pb-2 text-sm font-bold text-gray-800 ">
+                                <label htmlFor="title" className="pb-2 text-sm font-bold text-gray-800 ">
                                     Ad title
                                 </label>
-                                <input type="text" id="username" name="username" required className="border border-gray-300 dark:border-gray-700 pl-3 py-3 shadow-sm rounded text-sm focus:outline-none focus:border-indigo-700 bg-transparent placeholder-gray-500 text-gray-500 dark:text-gray-400" />
+                                <input type="text" id="title" name="title" required
+                                    value={formik.values.title}
+                                    onBlur={formik.handleBlur}
+                                    onChange={formik.handleChange}
+                                    className="border border-gray-300 dark:border-gray-700 pl-3 py-3 shadow-sm rounded text-sm focus:outline-none focus:border-indigo-700 bg-transparent placeholder-gray-500 text-gray-500 dark:text-gray-400"
+                                />
+                                <p className='text-red'>{formik.errors.title && formik.touched.title ? formik.errors.title : null}</p>
                             </div>
                             <div className="mt-8 flex flex-col xl:w-2/6 lg:w-1/2 md:w-1/2 w-full">
-                                <VehiclesBrand />
+                                <VehiclesBrand brand={brand} setBrand={setBrand} />
+                                <p className=' text-red-600'>{required && 'required'}</p>
                             </div>
                             <div className="mt-8 flex flex-col xl:w-3/5 lg:w-1/2 md:w-1/2 w-full">
                                 <label htmlFor="about" className="pb-2 text-sm font-bold text-gray-800 ">
                                     Description
                                 </label>
-                                <textarea id="about" name="about" required className="bg-transparent border border-gray-300   pl-3 py-3 shadow-sm rounded text-sm focus:outline-none focus:border-indigo-700 resize-none placeholder-gray-500 text-gray-500 dark:text-gray-400" placeholder="Let the world know who you are" rows={5} defaultValue={""} />
+                                <textarea id="description" name="description" required className="bg-transparent border border-gray-300   pl-3 py-3 shadow-sm rounded text-sm focus:outline-none focus:border-indigo-700 resize-none placeholder-gray-500 text-gray-500 dark:text-gray-400"
+                                    value={formik.values.description}
+                                    onChange={formik.handleChange}
+                                    onBlur={formik.handleBlur}
+                                    rows={5} defaultValue={""} />
                                 <p className="w-full text-right text-xs pt-1 ">Character Limit: 200</p>
+                                <p className='text-red-600'>{formik.errors.description && formik.touched.description ?
+                                    formik.errors.description : null}</p>
                             </div>
                             <div className="mt-8 flex flex-col xl:w-2/6 lg:w-1/2 md:w-1/2 w-full">
                                 <label htmlFor="FirstName" className="pb-2 text-sm font-bold">
                                     SET A PRICE
                                 </label>
-                                <input type="text" id="FirstName" name="firstName" required className="border border-gray-300 dark:border-gray-700 pl-3 py-3 shadow-sm bg-transparent rounded text-sm focus:outline-none focus:border-indigo-700 placeholder-gray-500 text-gray-500 dark:text-gray-400" />
+                                <input type="text" id="price" name="price" required
+                                    className="border border-gray-300 dark:border-gray-700 pl-3 py-3 shadow-sm bg-transparent rounded text-sm focus:outline-none focus:border-indigo-700 placeholder-gray-500 text-gray-500 dark:text-gray-400"
+                                    value={formik.values.price}
+                                    onChange={formik.handleChange}
+                                    onBlur={formik.handleBlur}
+                                />
+                                <p className='text-red-600'>{formik.errors.price && formik.touched.price ? formik.errors.price : null}</p>
                             </div>
                             <h1 className='mt-8'>UPLOAD UP TO 6 PHOTOS</h1>
                             <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-5 mt-8">
@@ -195,14 +222,15 @@ export default function Vehicle() {
                             </div>
                             <div className="mt-8 flex flex-col xl:w-2/6 lg:w-1/2 md:w-1/2 w-full">
                                 <h1>YOUR AD&aposS LOCATION</h1>
-                                <Location />
+                                <Location selectedLocation={selectedLocation} setSelectedLocation={setSelectedLocation} />
+                                <p className=' text-red-600'>{required && 'required'}</p>
                             </div>
                         </div>
                     </div>
                 </div>
                 <hr className='my-10' />
                 <h1>REVIEW YOUR DETAILS</h1>
-                <UserDetails />
+                <UserDetails formik={formik} />
             </div>
             <div className='mt-8'>
                 <button

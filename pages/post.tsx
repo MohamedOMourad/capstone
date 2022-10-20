@@ -8,7 +8,6 @@ import Vehicle from '../components/Vehicle'
 
 export default function Post() {
     const [sidebarOpen, setSidebarOpen] = useState(false)
-
     return (
         <>
             <div>
