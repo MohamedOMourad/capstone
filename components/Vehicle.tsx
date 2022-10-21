@@ -1,201 +1,36 @@
-import { Dispatch, Fragment, SetStateAction, useState } from 'react'
-import { Listbox, Transition } from '@headlessui/react'
-import { ChevronUpDownIcon } from '@heroicons/react/20/solid'
 import { CarBrand } from '../constant/vehicle'
-import { classNames, location } from '../constant'
+import { location } from '../constant'
 import UserDetails from './UserDetails'
 import { useFormik } from 'formik'
 import * as Yup from "yup";
+import Select from 'react-select'
 
-
-// function VehiclesBrand({ formik, brand, setBrand }: {
-//     formik: any,
-//     brand: { id: number, name: string } | undefined,
-//     setBrand: Dispatch<SetStateAction<{
-//         id: number;
-//         name: string;
-//     } | undefined>>
-// }
-// ) {
-//     return (
-//         <Listbox value={formik.values.brand}
-//             onChange={formik.handleChange}
-//         >
-//             {({ open }) => (
-//                 <>
-//                     <Listbox.Label className="block text-sm font-medium text-gray-700">Brand</Listbox.Label>
-//                     <div className="relative mt-1">
-//                         <Listbox.Button className="relative w-full cursor-default rounded-md border border-gray-300 bg-white py-2 pl-3 pr-10 text-left shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500 sm:text-sm">
-//                             <span className="block truncate">{!brand?.name ? 'select' : brand?.name}</span>
-//                             <span className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-2">
-//                                 <ChevronUpDownIcon className="h-5 w-5 text-gray-400" aria-hidden="true" />
-//                             </span>
-//                         </Listbox.Button>
-//                         <Transition
-//                             show={open}
-//                             as={Fragment}
-//                             leave="transition ease-in duration-100"
-//                             leaveFrom="opacity-100"
-//                             leaveTo="opacity-0"
-//                         >
-//                             <Listbox.Options className="absolute z-10 mt-1 max-h-60 w-full overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm">
-//                                 {CarBrand.map((car) => (
-//                                     <Listbox.Option
-//                                         key={car.id}
-//                                         className={({ active }) =>
-//                                             classNames(
-//                                                 active ? 'text-white bg-indigo-600' : 'text-gray-900',
-//                                                 'relative cursor-default select-none py-2 pl-3 pr-9'
-//                                             )
-//                                         }
-//                                         value={car}
-//                                     >
-//                                         <span className='font-norma'>
-//                                             {car.name}
-//                                         </span>
-//                                     </Listbox.Option>
-//                                 ))}
-//                             </Listbox.Options>
-//                         </Transition>
-//                         <p className='text-red-600'>{formik.errors.brand && formik.touched.brand ?
-//                             formik.errors.brand : null}</p>
-//                     </div>
-//                 </>
-//             )}
-//         </Listbox>
-//     )
-// }
-function VehiclesBrand({ formik, brand, setBrand }: {
-    formik: any,
-    brand: { id: number, name: string } | undefined,
-    setBrand: Dispatch<SetStateAction<{
-        id: number;
-        name: string;
-    } | undefined>>
-}
-) {
+function VehiclesBrand({ value, onChange, options }: { value: string, onChange: Function, options: { value: string, label: string }[] }) {
+    const defaultValue = (options: { value: string, label: string }[], value: string) => {
+        return options ? options.find((option) => option.value === value) : ''
+    }
     return (
-        <Listbox value={formik.values.brand}
-            onChange={formik.handleChange}
-        >
-            {({ open }) => (
-                <>
-                    <Listbox.Label className="block text-sm font-medium text-gray-700">Brand</Listbox.Label>
-                    <div className="relative mt-1">
-                        <Listbox.Button className="relative w-full cursor-default rounded-md border border-gray-300 bg-white py-2 pl-3 pr-10 text-left shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500 sm:text-sm">
-                            <span className="block truncate">{!brand?.name ? 'select' : brand?.name}</span>
-                            <span className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-2">
-                                <ChevronUpDownIcon className="h-5 w-5 text-gray-400" aria-hidden="true" />
-                            </span>
-                        </Listbox.Button>
-                        <Transition
-                            show={open}
-                            as={Fragment}
-                            leave="transition ease-in duration-100"
-                            leaveFrom="opacity-100"
-                            leaveTo="opacity-0"
-                        >
-                            <Listbox.Options className="absolute z-10 mt-1 max-h-60 w-full overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm">
-                                {CarBrand.map((car) => (
-                                    <Listbox.Option
-                                        key={car.id}
-                                        className={({ active }) =>
-                                            classNames(
-                                                active ? 'text-white bg-indigo-600' : 'text-gray-900',
-                                                'relative cursor-default select-none py-2 pl-3 pr-9'
-                                            )
-                                        }
-                                        value={car}
-                                    >
-                                        <span className='font-norma'>
-                                            {car.name}
-                                        </span>
-                                    </Listbox.Option>
-                                ))}
-                            </Listbox.Options>
-                        </Transition>
-                        <p className='text-red-600'>{formik.errors.brand && formik.touched.brand ?
-                            formik.errors.brand : null}</p>
-                    </div>
-                </>
-            )}
-        </Listbox>
+        <Select
+            value={defaultValue(options, value)}
+            onChange={(value) => onChange(value)}
+            options={options}
+        />
     )
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-function Location({ formik, selectedLocation, setSelectedLocation }: {
-    formik: any,
-    selectedLocation: { id: number, name: string } | undefined,
-    setSelectedLocation: any
-}) {
+function Location({ value, onChange, options }: { value: any, onChange: any, options: { label: string, value: string }[] }) {
+    const defaultValue = (options: { value: string, label: string }[], value: string) => {
+        return options ? options.find((option) => option.value === value) : ''
+    }
     return (
-        <Listbox value={location} onChange={setSelectedLocation}>
-            {({ open }) => (
-                <>
-                    <Listbox.Label className="block text-sm font-medium mt-8">Location</Listbox.Label>
-                    <div className="relative mt-1">
-                        <Listbox.Button className="relative w-full cursor-default rounded-md border border-gray-300 bg-white py-2 pl-3 pr-10 text-left shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500 sm:text-sm">
-                            <span className="block truncate">{!selectedLocation?.name ? 'select' : selectedLocation?.name}</span>
-                            <span className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-2">
-                                <ChevronUpDownIcon className="h-5 w-5 text-gray-400" aria-hidden="true" />
-                            </span>
-                        </Listbox.Button>
-
-                        <Transition
-                            show={open}
-                            as={Fragment}
-                            leave="transition ease-in duration-100"
-                            leaveFrom="opacity-100"
-                            leaveTo="opacity-0"
-                        >
-                            <Listbox.Options className="absolute z-10 mt-1 max-h-60 w-full overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm">
-                                {location.map((loc) => (
-                                    <Listbox.Option
-                                        key={loc.id}
-                                        className={({ active }) =>
-                                            classNames(
-                                                active ? 'text-white bg-indigo-600' : 'text-gray-900',
-                                                'relative cursor-default select-none py-2 pl-3 pr-9'
-                                            )
-                                        }
-                                        value={loc}
-                                    >
-                                        <span className='font-normal'>
-                                            {loc.name}
-                                        </span>
-                                    </Listbox.Option>
-                                ))}
-                            </Listbox.Options>
-                        </Transition>
-                        <p className='text-red-600'>{formik.errors.location && formik.touched.location ?
-                            formik.errors.location : null}</p>
-                    </div>
-                </>
-            )}
-        </Listbox>
+        <Select
+            value={defaultValue(options, value)}
+            options={options}
+            onChange={(value) => onChange(value)}
+        />
     )
 }
+
 function UploadPhoto() {
     return (
         <div className="rounded-lg shadow-xl bg-gray-50 ">
@@ -220,19 +55,16 @@ function UploadPhoto() {
         </div>
     )
 }
-export default function Vehicle() {
-    const [brand, setBrand] = useState<{ id: number, name: string }>();
-    const [selectedLocation, setSelectedLocation] = useState<{ id: number, name: string }>();
-    // const [required, setRequired] = useState(false);
 
+export default function Vehicle() {
     const formik = useFormik({
         initialValues: {
             title: '',
-            brand: brand,
+            brand: '',
             description: '',
             price: '',
             // imgUrl: [],
-            location: selectedLocation?.name,
+            location: '',
             phoneNumber: '',
             categoryId: 1,
             userId: ''
@@ -249,11 +81,6 @@ export default function Vehicle() {
         onSubmit: async (values) => {
             console.log(values.brand);
             console.log(values.location);
-            // if (!values.brand || !values.location) {
-            //     setRequired(true)
-            // } else {
-            //     console.log(values);
-            // }
             console.log(values);
         }
     })
@@ -277,8 +104,11 @@ export default function Vehicle() {
                                 <p className='text-red-600'>{formik.errors.title && formik.touched.title ? formik.errors.title : null}</p>
                             </div>
                             <div className="mt-8 flex flex-col xl:w-2/6 lg:w-1/2 md:w-1/2 w-full">
-                                <VehiclesBrand formik={formik} brand={brand} setBrand={setBrand} />
-                                {/* <p className=' text-red-600'>{required && 'required'}</p> */}
+                                <VehiclesBrand value={formik.values.brand}
+                                    onChange={(value: any) => formik.setFieldValue('brand', value.value)}
+                                    options={CarBrand} />
+                                <p className='text-red-600'>{formik.errors.brand && formik.touched.brand ?
+                                    formik.errors.brand : null}</p>
                             </div>
                             <div className="mt-8 flex flex-col xl:w-3/5 lg:w-1/2 md:w-1/2 w-full">
                                 <label htmlFor="about" className="pb-2 text-sm font-bold text-gray-800 ">
@@ -316,8 +146,10 @@ export default function Vehicle() {
                             </div>
                             <div className="mt-8 flex flex-col xl:w-2/6 lg:w-1/2 md:w-1/2 w-full">
                                 <h1>YOUR AD&aposS LOCATION</h1>
-                                <Location formik={formik} selectedLocation={selectedLocation} setSelectedLocation={setSelectedLocation} />
-                                {/* <p className=' text-red-600'>{required && 'required'}</p> */}
+                                <Location value={formik.values.location} options={location}
+                                    onChange={((value: any) => formik.setFieldValue('location', value.value))} />
+                                <p className='text-red-600'>{formik.errors.location && formik.touched.location ?
+                                    formik.errors.location : null}</p>
                             </div>
                         </div>
                     </div>
