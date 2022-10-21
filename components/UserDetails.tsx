@@ -16,11 +16,11 @@ const UserDetails = ({ formik }: { formik: any }) => {
                             Mobile Phone Number
                         </label>
                         <input type="text" id="phoneNumber" name="phoneNumber" required className="border border-gray-300 dark:border-gray-700 pl-3 py-3 shadow-sm bg-transparent rounded text-sm focus:outline-none focus:border-indigo-700 placeholder-gray-500 text-gray-500 dark:text-gray-400"
-                            value={formik.values.title}
+                            value={formik.values.phoneNumber}
                             onBlur={formik.handleBlur}
                             onChange={formik.handleChange}
                         />
-                        <p className='text-red'>{formik.errors.title && formik.touched.title ? formik.errors.title : null}</p>
+                        <p className='text-red-600'>{formik.errors.title && formik.touched.title ? formik.errors.title : null}</p>
                     </div>
                 </div>
             </div>
