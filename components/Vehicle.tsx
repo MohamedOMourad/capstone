@@ -1,9 +1,12 @@
+/* eslint-disable @next/next/no-img-element */
 import { CarBrand } from '../constant/vehicle'
 import { location } from '../constant'
 import UserDetails from './UserDetails'
 import { useFormik } from 'formik'
 import * as Yup from "yup";
 import Select from 'react-select'
+import { supabase } from '../lib/supabase';
+import { useEffect, useState } from 'react';
 
 function VehiclesBrand({ value, onChange, options }: { value: string, onChange: Function, options: { value: string, label: string }[] }) {
     const defaultValue = (options: { value: string, label: string }[], value: string) => {
@@ -31,7 +34,26 @@ function Location({ value, onChange, options }: { value: any, onChange: any, opt
     )
 }
 
-function UploadPhoto({ formik }: { formik: any }) {
+function UploadPhoto({ setImg, img, setLoading, setCounter }:
+    { setImg: Function, img: string[], setLoading: Function, setCounter: Function }) {
+    const handleUpload = async (event: any) => {
+        setLoading(true)
+        setCounter((counter: number) => counter + 1)
+        const avatarFile = event.target.files[0]
+        const { data, error } = await supabase.storage
+            .from('img')
+            .upload(`${Date.now()}`, avatarFile as File);
+        if (data) {
+            const { data: url } = await supabase.storage
+                .from('img')
+                .getPublicUrl(`${data?.path}`)
+            console.log(url);
+            setImg([...img, url.publicUrl])
+            setLoading(false)
+        } else if (error) {
+            console.log(error);
+        }
+    }
     return (
         <div className="rounded-lg shadow-xl bg-gray-50 ">
             <div className="m-4">
@@ -49,11 +71,7 @@ function UploadPhoto({ formik }: { formik: any }) {
                                 Select a photo</p>
                         </div>
                         <input
-                            id='imgUrl'
-                            name='imgUrl'
-                            required
-                            value={formik.values.imgUrl[0]}
-                            onChange={formik.handleChange}
+                            onChange={handleUpload}
                             type="file" className="opacity-0" />
                     </label>
                 </div>
@@ -63,14 +81,20 @@ function UploadPhoto({ formik }: { formik: any }) {
 }
 
 export default function Vehicle() {
-
+    const [img, setImg] = useState([])
+    const [required, setRequired] = useState(false)
+    const [loading, setLoading] = useState(false)
+    const [counter, setCounter] = useState(0)
+    useEffect(() => {
+        setLoading(false)
+    }, [img])
     const formik = useFormik({
         initialValues: {
             title: '',
             brand: '',
             description: '',
             price: '',
-            imgUrl: [],
+            // imgUrl: '',
             location: '',
             phoneNumber: '',
             categoryId: 1,
@@ -86,9 +110,16 @@ export default function Vehicle() {
             phoneNumber: Yup.string().required('required')
         }),
         onSubmit: async (values) => {
-            console.log(values.brand);
-            console.log(values.location);
-            console.log(values);
+            if (img.length <= 0) {
+                setRequired(true)
+            } else if (img.length !== counter) {
+                console.log(counter)
+                setLoading(true)
+            }
+            else {
+                setRequired(false)
+
+            }
         }
     })
     return (
@@ -143,14 +174,18 @@ export default function Vehicle() {
                                 <p className='text-red-600'>{formik.errors.price && formik.touched.price ? formik.errors.price : null}</p>
                             </div>
                             <h1 className='mt-8'>UPLOAD UP TO 6 PHOTOS</h1>
-                            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-5 mt-8">
-                                <UploadPhoto formik={formik} />
-                                <UploadPhoto formik={formik} />
-                                <UploadPhoto formik={formik} />
-                                <UploadPhoto formik={formik} />
-                                <UploadPhoto formik={formik} />
-                                <UploadPhoto formik={formik} />
+                            <div className="mt-8 flex flex-col xl:w-2/6 lg:w-1/2 md:w-1/2 w-full">
+                                {!loading&&<UploadPhoto setImg={setImg} img={img} setLoading={setLoading} setCounter={setCounter} />}
                             </div>
+                            {loading && <p className='mt-10'>loading...</p>}
+                            {required && <p className='text-red-600'>upload at least one image</p>}
+                            <ul role="list" className="my-10 grid grid-cols-6 gap-1 sm:grid-cols-3  lg:grid-cols-6">
+                                {img.map((file,i) => (
+                                    <li key={i} className="relative">
+                                            <img src={file} alt="" className=" h-16  group-hover:opacity-75" />
+                                    </li>
+                                ))}
+                            </ul>
                             <div className="mt-8 flex flex-col xl:w-2/6 lg:w-1/2 md:w-1/2 w-full">
                                 <h1>YOUR AD&aposS LOCATION</h1>
                                 <Location value={formik.values.location} options={location}

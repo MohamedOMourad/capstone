@@ -14,12 +14,12 @@ export function classNames(...classes: any) {
 }
 
 export const navigation = [
-    { value: 'Vehicles', href: '#', icon: HomeIcon, current: true },
-    { value: 'Properties', href: '#', icon: UsersIcon, current: false },
-    { value: 'Mobile Phones', href: '#', icon: FolderIcon, current: false },
-    { value: 'Electronics', href: '#', icon: CalendarIcon, current: false },
-    { value: 'Fashion', href: '#', icon: InboxIcon, current: false },
-    { value: 'Books', href: '#', icon: ChartBarIcon, current: false },
+    { name: 'Vehicles', href: '#', icon: HomeIcon, current: true },
+    { name: 'Properties', href: '#', icon: UsersIcon, current: false },
+    { name: 'Mobile Phones', href: '#', icon: FolderIcon, current: false },
+    { name: 'Electronics', href: '#', icon: CalendarIcon, current: false },
+    { name: 'Fashion', href: '#', icon: InboxIcon, current: false },
+    { name: 'Books', href: '#', icon: ChartBarIcon, current: false },
 ]
 
 export const location = [
