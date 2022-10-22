@@ -7,6 +7,8 @@ import * as Yup from "yup";
 import Select from 'react-select'
 import { supabase } from '../lib/supabase';
 import { useEffect, useState } from 'react';
+import { useUser } from '@supabase/auth-helpers-react';
+import { createAD } from '../utils/API';
 
 function VehiclesBrand({ value, onChange, options }: { value: string, onChange: Function, options: { value: string, label: string }[] }) {
     const defaultValue = (options: { value: string, label: string }[], value: string) => {
@@ -81,13 +83,14 @@ function UploadPhoto({ setImg, img, setLoading, setCounter }:
 }
 
 export default function Vehicle() {
-    const [img, setImg] = useState([])
+    const [images, setImg] = useState<string[]>([])
     const [required, setRequired] = useState(false)
     const [loading, setLoading] = useState(false)
     const [counter, setCounter] = useState(0)
+    const user = useUser()
     useEffect(() => {
         setLoading(false)
-    }, [img])
+    }, [images])
     const formik = useFormik({
         initialValues: {
             title: '',
@@ -97,8 +100,7 @@ export default function Vehicle() {
             // imgUrl: '',
             location: '',
             phoneNumber: '',
-            categoryId: 1,
-            userId: ''
+            userId: user?.id
         },
         validationSchema: Yup.object({
             title: Yup.string().required('required'),
@@ -110,15 +112,15 @@ export default function Vehicle() {
             phoneNumber: Yup.string().required('required')
         }),
         onSubmit: async (values) => {
-            if (img.length <= 0) {
+            if (images.length <= 0) {
                 setRequired(true)
-            } else if (img.length !== counter) {
+            } else if (images.length !== counter) {
                 console.log(counter)
                 setLoading(true)
             }
             else {
                 setRequired(false)
-
+                await createAD({ ...values, images })
             }
         }
     })
@@ -142,6 +144,9 @@ export default function Vehicle() {
                                 <p className='text-red-600'>{formik.errors.title && formik.touched.title ? formik.errors.title : null}</p>
                             </div>
                             <div className="mt-8 flex flex-col xl:w-2/6 lg:w-1/2 md:w-1/2 w-full">
+                                <label htmlFor="about" className="pb-2 text-sm font-bold text-gray-800 ">
+                                    Brand
+                                </label>
                                 <VehiclesBrand value={formik.values.brand}
                                     onChange={(value: any) => formik.setFieldValue('brand', value.value)}
                                     options={CarBrand} />
@@ -175,19 +180,19 @@ export default function Vehicle() {
                             </div>
                             <h1 className='mt-8'>UPLOAD UP TO 6 PHOTOS</h1>
                             <div className="mt-8 flex flex-col xl:w-2/6 lg:w-1/2 md:w-1/2 w-full">
-                                {!loading&&<UploadPhoto setImg={setImg} img={img} setLoading={setLoading} setCounter={setCounter} />}
+                                {!loading && <UploadPhoto setImg={setImg} img={images} setLoading={setLoading} setCounter={setCounter} />}
                             </div>
                             {loading && <p className='mt-10'>loading...</p>}
                             {required && <p className='text-red-600'>upload at least one image</p>}
                             <ul role="list" className="my-10 grid grid-cols-6 gap-1 sm:grid-cols-3  lg:grid-cols-6">
-                                {img.map((file,i) => (
+                                {images.map((image, i) => (
                                     <li key={i} className="relative">
-                                            <img src={file} alt="" className=" h-16  group-hover:opacity-75" />
+                                        <img src={image} alt="" className=" h-16  group-hover:opacity-75" />
                                     </li>
                                 ))}
                             </ul>
                             <div className="mt-8 flex flex-col xl:w-2/6 lg:w-1/2 md:w-1/2 w-full">
-                                <h1>YOUR AD&aposS LOCATION</h1>
+                                <h1>YOUR Ad&apos;s LOCATION</h1>
                                 <Location value={formik.values.location} options={location}
                                     onChange={((value: any) => formik.setFieldValue('location', value.value))} />
                                 <p className='text-red-600'>{formik.errors.location && formik.touched.location ?

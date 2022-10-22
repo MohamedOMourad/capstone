@@ -8,3 +8,20 @@ export const createUSer = async (user: User, supabaseClient: SupabaseClient<any,
     const res = await axios.post('/api/user', { ...user, id: supabaseAuthRes?.data?.user?.id })
     console.log(res)
 }
+type Ad = {
+    title: string;
+    brand: string;
+    description: string;
+    price: string;
+    location: string;
+    phoneNumber: string;
+    userId: string | undefined;
+    images: string[]
+}
+// title, brand, description, images, price, location, userId
+export const createAD = async (prod: Ad) => {
+
+    const res = await axios.post('api/product/vehicle', { ...prod })
+    const product = await res.data;
+    console.log(product)
+}
