@@ -31,7 +31,7 @@ function Location({ value, onChange, options }: { value: any, onChange: any, opt
     )
 }
 
-function UploadPhoto() {
+function UploadPhoto({ formik }: { formik: any }) {
     return (
         <div className="rounded-lg shadow-xl bg-gray-50 ">
             <div className="m-4">
@@ -48,7 +48,13 @@ function UploadPhoto() {
                             <p className="pt-1 text-sm tracking-wider text-gray-400 group-hover:text-gray-600">
                                 Select a photo</p>
                         </div>
-                        <input type="file" className="opacity-0" />
+                        <input
+                            id='imgUrl'
+                            name='imgUrl'
+                            required
+                            value={formik.values.imgUrl[0]}
+                            onChange={formik.handleChange}
+                            type="file" className="opacity-0" />
                     </label>
                 </div>
             </div>
@@ -57,13 +63,14 @@ function UploadPhoto() {
 }
 
 export default function Vehicle() {
+
     const formik = useFormik({
         initialValues: {
             title: '',
             brand: '',
             description: '',
             price: '',
-            // imgUrl: [],
+            imgUrl: [],
             location: '',
             phoneNumber: '',
             categoryId: 1,
@@ -137,12 +144,12 @@ export default function Vehicle() {
                             </div>
                             <h1 className='mt-8'>UPLOAD UP TO 6 PHOTOS</h1>
                             <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-5 mt-8">
-                                <UploadPhoto />
-                                <UploadPhoto />
-                                <UploadPhoto />
-                                <UploadPhoto />
-                                <UploadPhoto />
-                                <UploadPhoto />
+                                <UploadPhoto formik={formik} />
+                                <UploadPhoto formik={formik} />
+                                <UploadPhoto formik={formik} />
+                                <UploadPhoto formik={formik} />
+                                <UploadPhoto formik={formik} />
+                                <UploadPhoto formik={formik} />
                             </div>
                             <div className="mt-8 flex flex-col xl:w-2/6 lg:w-1/2 md:w-1/2 w-full">
                                 <h1>YOUR AD&aposS LOCATION</h1>
