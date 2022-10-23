@@ -5,6 +5,7 @@ import { Dialog, Transition } from '@headlessui/react'
 import { Bars3Icon, XMarkIcon, } from '@heroicons/react/24/outline'
 import { classNames, navigation, location } from '../constant'
 import Vehicle from '../components/Vehicle'
+import { withPageAuth } from '@supabase/auth-helpers-nextjs'
 
 export default function Post() {
     const [sidebarOpen, setSidebarOpen] = useState(false)
@@ -163,3 +164,5 @@ export default function Post() {
         </>
     )
 }
+
+export const getServerSideProps = withPageAuth({redirectTo: '/'});
