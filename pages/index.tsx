@@ -5,16 +5,16 @@ import Advertise from '../components/Advertise'
 import Footer from '../components/Footer'
 import Gallary from '../components/Gallary'
 import Header from '../components/Header'
+import Hero from '../components/Hero'
 import LoginModel from '../components/LoginModel'
+import Tap from '../components/Tap'
 import { prisma } from '../lib/prisma'
 const Home: NextPage = ({ products }: { products?: Product[] }) => {
-  const [open, setOpen] = useState(false)
   return (
     <>
-      <Header setOpen={setOpen} />
+      <Tap />
+      <Hero/>
       <Advertise products={products!} />
-      <LoginModel open={open} setOpen={setOpen} />
-      <Footer />
     </>
   )
 }

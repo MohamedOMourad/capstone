@@ -4,6 +4,7 @@ import { useRouter } from 'next/router';
 import { createBrowserSupabaseClient, Session } from '@supabase/auth-helpers-nextjs';
 import { SessionContextProvider } from '@supabase/auth-helpers-react';
 import { useState } from 'react';
+import Layout from '../components/layout';
 function MyApp({ Component, pageProps }: AppProps<{ initialSession: Session }>) {
   const router = useRouter();
   const [supabaseClient] = useState(() => createBrowserSupabaseClient());
@@ -20,8 +21,9 @@ function MyApp({ Component, pageProps }: AppProps<{ initialSession: Session }>) 
       >
         Logout
       </button>
-
-      <Component {...pageProps} />
+      <Layout>
+        <Component {...pageProps} />
+      </Layout>
     </SessionContextProvider>
   );
 }

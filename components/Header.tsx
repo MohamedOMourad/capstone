@@ -63,74 +63,10 @@ const Search = () => {
     );
 }
 const Tap = () => {
-    const [activeStatus, setActiveStatus] = useState(0);
-    return (
-        <>
-            <div className="lg:hidden relative w-11/12 mx-auto bg-white rounded">
-                <div className="absolute inset-0 m-auto mr-4 z-0 w-6 h-6">
-                    <svg xmlns="http://www.w3.org/2000/svg" className="icon icon-tabler icon-tabler-selector" width={24} height={24} viewBox="0 0 24 24" strokeWidth="1.5" stroke="#A0AEC0" fill="none" strokeLinecap="round" strokeLinejoin="round">
-                        <path stroke="none" d="M0 0h24v24H0z" />
-                        <polyline points="8 9 12 5 16 9" />
-                        <polyline points="16 15 12 19 8 15" />
-                    </svg>
-                </div>
-                <select aria-label="Selected tab" className="form-select block w-full p-3 border border-gray-300 rounded text-gray-600 appearance-none bg-transparent relative z-10">
-                    {navigation.map((item) => (
-                        <option key={item.name} className="text-sm text-gray-600">{item.name} </option>
-                    ))}
-                </select>
-            </div>
-            <div className="sm:w-full sm:mx-0 h-12 hidden lg:block bg-white shadow rounded">
-                <ul className="flex justify-center border-b px-5">
-                    {navigation.map((item, index) => (
-                        <li key={item.name} onClick={() => setActiveStatus(item.activeStatus)} className={activeStatus == index ? "text-sm border-indigo-700 pt-3 rounded-t text-indigo-700 mr-12" : "text-sm text-gray-600 py-3 flex items-center mr-12 hover:text-indigo-700 cursor-pointer"}>
-                            <div className="flex items-center mb-3">
-                                <span>
-                                    <svg xmlns="http://www.w3.org/2000/svg" className="icon icon-tabler icon-tabler-home" width={16} height={16} viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" fill="none" strokeLinecap="round" strokeLinejoin="round">
-                                        <path stroke="none" d="M0 0h24v24H0z" />
-                                        <polyline points="5 12 3 12 12 3 21 12 19 12" />
-                                        <path d="M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-7" />
-                                        <path d="M9 21v-6a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v6" />
-                                    </svg>
-                                </span>
-                                <span className="ml-1 font-normal">{item.name}</span>
-                            </div>
-                            {activeStatus == index && <div className="w-full h-1 bg-indigo-700 rounded-t-md" />}
-                        </li>
-                    ))}
-                </ul>
-            </div>
-        </>
-    );
+
 }
 
-const HeroSection = () => {
-    return (
-        <main>
-            <div className="relative bg-white pt-3">
-                <div className="absolute inset-x-0 bottom-0 h-1/2 bg-gray-100" />
-                <div className="mx-auto max-w-7xl sm:px-6 lg:px-8">
-                    <div className="relative shadow-xl sm:overflow-hidden sm:rounded-2xl">
-                        <div className="absolute inset-0">
-                            <img
-                                className="h-full w-full object-cover"
-                                src="https://images.unsplash.com/photo-1521737852567-6949f3f9f2b5?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=2830&q=80&sat=-100"
-                                alt="People working on laptops"
-                            />
-                            <div className="absolute inset-0 bg-gradient-to-r from-purple-800 to-indigo-700 mix-blend-multiply" />
-                        </div>
-                        <div className="relative px-4 py-16 sm:px-6 sm:py-24 lg:py-32 lg:px-8">
-                            <h1 className="text-center text-4xl font-bold tracking-tight sm:text-5xl lg:text-6xl">
-                                <span className="block text-white">Take control of your</span>
-                                <span className="block text-indigo-200">shopping and Sells</span>
-                            </h1>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </main>
-    );
-}
+
 
 export default function Header({ setOpen }: { setOpen: Dispatch<SetStateAction<boolean>> }) {
     const router = useRouter()
@@ -248,10 +184,7 @@ export default function Header({ setOpen }: { setOpen: Dispatch<SetStateAction<b
                         </Transition>
                     </Popover>
                 </header>
-                <Tap />
             </div>
-            <HeroSection />
         </>
-
     )
 }
