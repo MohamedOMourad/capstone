@@ -55,7 +55,6 @@ const SignInFormik = () => {
         onSubmit: async (values) => {
             const credentials = { ...values }
             const res = await supabaseClient.auth.signInWithPassword(credentials)
-            console.log(res);
             // formik.resetForm();
             router.push('/')
         },

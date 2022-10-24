@@ -7,6 +7,7 @@ import { classNames } from '../constant'
 import Vehicle from '../components/Vehicle'
 import { withPageAuth } from '@supabase/auth-helpers-nextjs'
 import Phone from '../components/Phone'
+import Apartment from '../components/Apartment'
 
 const navigation = [
     { name: 'Vehicles', href: '#', activeStatus: 0 },
@@ -149,7 +150,7 @@ export default function Post() {
                                 {/* Replace with your content */}
                                 <div className="py-4">
                                     {activeStatus === 0 && <Vehicle />}
-                                    {activeStatus === 1 && <Vehicle />}
+                                    {activeStatus === 1 && <Apartment />}
                                     {activeStatus === 2 && <Phone />}
                                     {activeStatus === 3 && <Vehicle />}
                                     {activeStatus === 4 && <Vehicle />}

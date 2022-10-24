@@ -13,7 +13,6 @@ const UploadPhoto = ({ setImg, img, setLoading, setCounter }:
       const { data: url } = await supabase.storage
         .from('img')
         .getPublicUrl(`${data?.path}`)
-      console.log(url);
       setImg([...img, url.publicUrl])
       setLoading(false)
     } else if (error) {

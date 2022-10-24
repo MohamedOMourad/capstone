@@ -8,8 +8,6 @@ import ProductDetails from '../../components/ProductDetails';
 
 
 const Product = ({ products, product }: { products: any, product: any }) => {
-    console.log(products);
-    console.log(product);
     const { images, title, description, price, brand } = product;
     const [index, setIndex] = useState(0);
 
@@ -84,7 +82,6 @@ export const getStaticPaths: GetStaticPaths = async () => {
 export const getStaticProps: GetStaticProps = async ({ params }) => {
     const products = await prisma?.product.findMany({ include: { images: true } })
     const product = products?.find(product => product.id === +params?.slug!)
-    console.log(product);
     return {
         props: { products: JSON.parse(JSON.stringify(products)), product: JSON.parse(JSON.stringify(product)) }
     }

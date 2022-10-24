@@ -13,10 +13,10 @@ datasource db {
 model User {
   id          String    @id
   email       String    @unique @db.VarChar(255)
-  password       String    @db.VarChar(255)
+  password    String    @db.VarChar(255)
   firstName   String    @db.VarChar(255)
   lastName    String    @db.VarChar(255)
-  phoneNumber String?    @db.VarChar(255)
+  phoneNumber String?   @db.VarChar(255)
   product     Product[]
 }
 
@@ -37,7 +37,7 @@ model Category {
 model Product {
   id            Int       @id @default(autoincrement())
   title         String    @db.VarChar(255)
-  brand         String    @db.VarChar(255)
+  brand         String?   @db.VarChar(255)
   description   String    @db.VarChar(255)
   price         String    @db.VarChar(255)
   location      String    @db.VarChar(255)
@@ -47,6 +47,7 @@ model Product {
   area          String?   @db.VarChar(255)
   bedrooms      String?   @db.VarChar(255)
   bathrooms     String?   @db.VarChar(255)
+  level         String?   @db.VarChar(255)
   baymentOption String?   @db.VarChar(255)
   Furnished     Boolean?
   images        Image[]

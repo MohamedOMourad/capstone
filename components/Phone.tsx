@@ -55,7 +55,6 @@ export default function Phone() {
             if (images.length <= 0) {
                 setRequired(true)
             } else if (images.length !== counter) {
-                console.log(counter)
                 setLoading(true)
             }
             else {

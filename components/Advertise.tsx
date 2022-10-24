@@ -7,7 +7,6 @@ import { classNames } from "../constant";
 import Link from "next/link";
 
 export default function Advertise({ products }: { products: Product[] }) {
-    console.log(products)
     const [isLoading, setLoading] = useState(true)
     return (
         <>
