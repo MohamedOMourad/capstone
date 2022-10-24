@@ -7,7 +7,7 @@ import * as Yup from "yup";
 import Select from 'react-select'
 import { useEffect, useState } from 'react';
 import { useUser } from '@supabase/auth-helpers-react';
-import { createAD } from '../utils/API';
+import { createPhoneAD } from '../utils/API';
 import Location from './Location';
 import UploadPhoto from './UploadPhoto';
 
@@ -60,7 +60,7 @@ export default function Phone() {
             }
             else {
                 setRequired(false)
-                await createAD({ ...values, images })
+                await createPhoneAD({ ...values, images })
             }
         }
     })
