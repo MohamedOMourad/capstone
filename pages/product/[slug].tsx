@@ -4,6 +4,7 @@ import Image from 'next/image'
 import { GetStaticPaths, GetStaticProps } from 'next';
 import { prisma } from '../../lib/prisma'
 import { BiPhoneCall } from 'react-icons/Bi';
+import ProductDetails from '../../components/ProductDetails';
 
 
 const Product = ({ products, product }: { products: any, product: any }) => {
@@ -14,7 +15,7 @@ const Product = ({ products, product }: { products: any, product: any }) => {
 
     return (
         <div>
-            <div className="flex  gap-10 mt-20 mx-5">
+            <div className="flex gap-10 mx-5">
                 <div>
                     <div>
                         <Image
@@ -50,16 +51,16 @@ const Product = ({ products, product }: { products: any, product: any }) => {
                 </div>
             </div>
 
-            {/* <div className="maylike-products-wrapper">
+            <div className="maylike-products-wrapper">
                 <h2>You may also like</h2>
                 <div className="marquee">
                     <div className="maylike-products-container track">
-                        {products.map((item) => (
-                            <Product key={item._id} product={item} />
+                        {products.map((item: any, i: number) => (
+                            <ProductDetails key={i} product={item} />
                         ))}
                     </div>
                 </div>
-            </div> */}
+            </div>
         </div>
     )
 }
