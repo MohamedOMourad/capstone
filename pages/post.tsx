@@ -77,26 +77,16 @@ export default function Post() {
                                             />
                                         </div>
                                         <nav className="mt-5 space-y-1 px-2">
-                                            {navigation.map((item) => (
-                                                <a
+                                            {navigation.map((item, index) => (
+                                                <h1
                                                     key={item.name}
-                                                    href={item.href}
-                                                    className={classNames(
-                                                        item.current
-                                                            ? 'bg-gray-100 text-gray-900'
-                                                            : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900',
-                                                        'group flex items-center px-2 py-2 text-base font-medium rounded-md'
-                                                    )}
+                                                    onClick={() => setActiveStatus(item.activeStatus)}
+                                                    className={activeStatus === index ? "text-lg border-indigo-700 pt-3 rounded-t text-indigo-700 mr-12" :
+                                                        "text-md text-gray-600 py-3 flex items-center mr-12 hover:text-indigo-700 cursor-pointer"}
                                                 >
-                                                    <item.icon
-                                                        className={classNames(
-                                                            item.current ? 'text-gray-500' : 'text-gray-400 group-hover:text-gray-500',
-                                                            'mr-4 flex-shrink-0 h-6 w-6'
-                                                        )}
-                                                        aria-hidden="true"
-                                                    />
                                                     {item.name}
-                                                </a>
+                                                    {activeStatus === index && <div className="w-full h-1 bg-indigo-700 rounded-t-md" />}
+                                                </h1>
                                             ))}
                                         </nav>
                                     </div>

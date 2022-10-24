@@ -18,6 +18,7 @@ import { Popover, Transition } from '@headlessui/react'
 import { Bars3Icon, XMarkIcon, } from '@heroicons/react/24/outline'
 import { useUser } from '@supabase/auth-helpers-react'
 import { useRouter } from 'next/router'
+import Link from 'next/link'
 
 const navigation = [
     { name: 'Vehicles', href: '#', activeStatus: 0 },
@@ -76,17 +77,19 @@ export default function Header({ setOpen }: { setOpen: Dispatch<SetStateAction<b
             <div className="bg-white">
                 <header>
                     <Popover className="relative bg-white">
-                        <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-6 sm:px-6 md:justify-start md:space-x-10 lg:px-8">
+                        <div className="px-1 flex  items-center justify-between ">
                             {/* image logo */}
                             <div className="flex justify-start lg:w-0 lg:flex-1">
-                                <a href="#">
+                                <Link href={'/'}>
+                                <a >
                                     <span className="sr-only">Your Company</span>
                                     <img
                                         className="h-8 w-auto sm:h-10"
                                         src="https://tailwindui.com/img/logos/mark.svg?from-color=purple&from-shade=600&to-color=indigo&to-shade=600&toShade=600"
                                         alt=""
                                     />
-                                </a>
+                                    </a>
+                                </Link>
                             </div>
                             {/* burger Icon */}
                             <div className="-my-2 -mr-2 md:hidden">
