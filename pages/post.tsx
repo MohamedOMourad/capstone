@@ -3,12 +3,23 @@
 import { Fragment, useState } from 'react'
 import { Dialog, Transition } from '@headlessui/react'
 import { Bars3Icon, XMarkIcon, } from '@heroicons/react/24/outline'
-import { classNames, navigation, location } from '../constant'
+import { classNames } from '../constant'
 import Vehicle from '../components/Vehicle'
 import { withPageAuth } from '@supabase/auth-helpers-nextjs'
+import Phone from '../components/Phone'
+
+const navigation = [
+    { name: 'Vehicles', href: '#', activeStatus: 0 },
+    { name: 'Properties', href: '#', activeStatus: 1 },
+    { name: 'Mobile Phones', href: '#', activeStatus: 2 },
+    { name: 'Electronics', href: '#', activeStatus: 3 },
+    { name: 'Furniture', href: '#', activeStatus: 4 },
+    { name: 'Fashion & Beauty', href: '#', activeStatus: 5 },
+]
 
 export default function Post() {
     const [sidebarOpen, setSidebarOpen] = useState(false)
+    const [activeStatus, setActiveStatus] = useState(0);
     return (
         <>
             <div>
@@ -109,24 +120,18 @@ export default function Post() {
                                 />
                             </div>
                             <nav className="mt-5 flex-1 space-y-1 bg-white px-2">
-                                {navigation.map((item) => (
-                                    <a
-                                        key={item.name}
-                                        href={item.href}
-                                        className={classNames(
-                                            item.current ? 'bg-gray-100 text-gray-900' : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900',
-                                            'group flex items-center px-2 py-2 text-sm font-medium rounded-md'
-                                        )}
-                                    >
-                                        <item.icon
-                                            className={classNames(
-                                                item.current ? 'text-gray-500' : 'text-gray-400 group-hover:text-gray-500',
-                                                'mr-3 flex-shrink-0 h-6 w-6'
-                                            )}
-                                            aria-hidden="true"
-                                        />
-                                        {item.name}
-                                    </a>
+                                {navigation.map((item, index) => (
+                                    <>
+                                        <h1
+                                            key={item.name}
+                                            onClick={() => setActiveStatus(item.activeStatus)}
+                                            className={activeStatus == index ? "text-lg border-indigo-700 pt-3 rounded-t text-indigo-700 mr-12" :
+                                                "text-md text-gray-600 py-3 flex items-center mr-12 hover:text-indigo-700 cursor-pointer"}
+                                        >
+                                            {item.name}
+                                        </h1>
+                                        {activeStatus == index && <div className="w-full h-1 bg-indigo-700 rounded-t-md" />}
+                                    </>
                                 ))}
                             </nav>
                         </div>
@@ -153,7 +158,12 @@ export default function Post() {
                             <div className="mx-auto max-w-7xl px-4 sm:px-6 md:px-8">
                                 {/* Replace with your content */}
                                 <div className="py-4">
-                                    <Vehicle />
+                                    {activeStatus === 0 && <Vehicle />}
+                                    {activeStatus === 1 && <Vehicle />}
+                                    {activeStatus === 2 && <Phone />}
+                                    {activeStatus === 3 && <Vehicle />}
+                                    {activeStatus === 4 && <Vehicle />}
+                                    {activeStatus === 5 && <Vehicle />}
                                 </div>
                                 {/* /End replace */}
                             </div>
@@ -165,4 +175,4 @@ export default function Post() {
     )
 }
 
-export const getServerSideProps = withPageAuth({redirectTo: '/'});
+export const getServerSideProps = withPageAuth({ redirectTo: '/' });

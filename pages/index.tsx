@@ -1,19 +1,14 @@
 import { Product } from '@prisma/client'
 import type { NextPage } from 'next'
-import { useState } from 'react'
 import Advertise from '../components/Advertise'
-import Footer from '../components/Footer'
-import Gallary from '../components/Gallary'
-import Header from '../components/Header'
 import Hero from '../components/Hero'
-import LoginModel from '../components/LoginModel'
 import Tap from '../components/Tap'
 import { prisma } from '../lib/prisma'
 const Home: NextPage = ({ products }: { products?: Product[] }) => {
   return (
     <>
       <Tap />
-      <Hero/>
+      <Hero />
       <Advertise products={products!} />
     </>
   )
