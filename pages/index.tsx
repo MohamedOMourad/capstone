@@ -4,7 +4,25 @@ import Advertise from '../components/Advertise'
 import Hero from '../components/Hero'
 import Tap from '../components/Tap'
 import { prisma } from '../lib/prisma'
+import { useEffect } from 'react'
+import io from 'Socket.IO-client'
+let socket
 const Home: NextPage = ({ products }: { products?: Product[] }) => {
+
+  useEffect(() => {
+    socketInitializer()
+  }, [])
+
+  const socketInitializer = async () => {
+    await fetch('/api/socket')
+    socket = io()
+
+    socket.on('connect', () => {
+      console.log('connected')
+    })
+  }
+
+
   return (
     <>
       <Tap />
