@@ -14,11 +14,13 @@
   ```
 */
 import { Dispatch, Fragment, SetStateAction, useState } from 'react'
-import { Popover, Transition } from '@headlessui/react'
+import { Menu, Popover, Transition } from '@headlessui/react'
 import { Bars3Icon, XMarkIcon, } from '@heroicons/react/24/outline'
-import { useUser } from '@supabase/auth-helpers-react'
+import { useSessionContext, useUser } from '@supabase/auth-helpers-react'
 import { useRouter } from 'next/router'
 import Link from 'next/link'
+import { classNames } from '../constant'
+import { createBrowserSupabaseClient } from '@supabase/auth-helpers-nextjs'
 
 const navigation = [
     { name: 'Vehicles', href: '#', activeStatus: 0 },
@@ -31,7 +33,7 @@ const navigation = [
 
 const Search = () => {
     return (
-        <div className=" flex justify-start items-center py-7 relative">
+        <div className=" flex justify-start items-center py-1 relative">
             <input
                 className="text-sm leading-none text-left text-gray-600 px-4 py-3 w-full border rounded border-gray-300  outline-none"
                 type="text"
@@ -63,21 +65,17 @@ const Search = () => {
         </div>
     );
 }
-const Tap = () => {
-
-}
-
-
 
 export default function Header({ setOpen }: { setOpen: Dispatch<SetStateAction<boolean>> }) {
     const router = useRouter()
     const user = useUser();
+    const { supabaseClient } = useSessionContext();
     return (
         <>
             <div className="bg-white">
                 <header>
                     <Popover className="relative bg-white">
-                        <div className="px-1 flex  items-center justify-between ">
+                        <div className="px-5 flex  items-center justify-between ">
                             {/* image logo */}
                             <div className="flex justify-start lg:w-0 lg:flex-1">
                                 <Link href={'/'}>
@@ -106,9 +104,51 @@ export default function Header({ setOpen }: { setOpen: Dispatch<SetStateAction<b
                             </Popover.Group>
                             {/* login */}
                             <div className="hidden items-center justify-end md:flex md:flex-1 lg:w-0">
-                                {!user && <button onClick={() => setOpen(true)} className="whitespace-nowrap text-base font-medium text-gray-500 hover:text-gray-900">
+                                {!user ? <button onClick={() => setOpen(true)} className="whitespace-nowrap text-base font-medium text-gray-500 hover:text-gray-900">
                                     Sign in
-                                </button>}
+                                </button> :
+                                    <Menu as="div" className="relative ml-3">
+                                        <div>
+                                            <Menu.Button className="flex max-w-xs items-center rounded-full bg-white text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">
+                                                <span className="sr-only">Open user menu</span>
+                                                <img
+                                                    className="h-8 w-8 rounded-full"
+                                                    src={"https://review2020.s3.amazonaws.com/360_F_346839683_6nAPzbhpSkIpb8pmAwufkC7c5eD7wYws.jpg" }
+                                                    alt="Profile"
+                                                />
+                                            </Menu.Button>
+                                        </div>
+                                        <Transition
+                                            as={Fragment}
+                                            enter="transition ease-out duration-100"
+                                            enterFrom="transform opacity-0 scale-95"
+                                            enterTo="transform opacity-100 scale-100"
+                                            leave="transition ease-in duration-75"
+                                            leaveFrom="transform opacity-100 scale-100"
+                                            leaveTo="transform opacity-0 scale-95"
+                                        >
+                                            <Menu.Items className="absolute right-0 z-10 mt-2 w-48 origin-top-right rounded-md bg-white py-1 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
+                                                <Menu.Item>
+                                                    {({ active }) => (
+                                                        <p
+                                                            className={classNames(
+                                                                active ? "bg-gray-100" : "",
+                                                                "block px-4 py-2 text-sm text-gray-700 cursor-pointer",
+                                                                "hover:bg-gray-100"
+                                                            )}
+                                                            onClick={async () => {
+                                                                await supabaseClient.auth.signOut();
+                                                                router.push('/');
+                                                            }}
+                                                        >
+                                                            Sign out
+                                                        </p>
+                                                    )}
+                                                </Menu.Item>
+                                            </Menu.Items>
+                                        </Transition>
+                                    </Menu>
+                                }
                                 {!user ? <button
                                     onClick={() => setOpen(true)}
                                     className="ml-8 inline-flex items-center justify-center whitespace-nowrap rounded-md border border-transparent bg-gradient-to-r from-purple-600 to-indigo-600 bg-origin-border px-4 py-2 text-base font-medium text-white shadow-sm hover:from-purple-700 hover:to-indigo-700"
