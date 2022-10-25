@@ -6,6 +6,7 @@ import Tap from '../components/Tap'
 import { prisma } from '../lib/prisma'
 import { useEffect } from 'react'
 import io from 'Socket.IO-client'
+import Chat from '../components/Chat'
 let socket
 const Home: NextPage = ({ products }: { products?: Product[] }) => {
 
@@ -25,6 +26,7 @@ const Home: NextPage = ({ products }: { products?: Product[] }) => {
 
   return (
     <>
+      <Chat/>
       <Tap />
       <Hero />
       <Advertise products={products!} />
