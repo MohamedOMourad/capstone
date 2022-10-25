@@ -25,13 +25,11 @@ export const createVehicleAD = async (ad: Ad) => {
 
     const res = await axios.post('api/product/vehicle', { ...ad })
     const product = await res.data;
-    console.log(product)
 }
 export const createPhoneAD = async (ad: Ad) => {
 
     const res = await axios.post('api/product/phone', { ...ad })
     const product = await res.data;
-    console.log(product)
 }
 export const createApartmentAD = async (ad: Ad) => {
     const res = await axios.post('api/product/apartment', {
@@ -39,5 +37,4 @@ export const createApartmentAD = async (ad: Ad) => {
         bathrooms: ad?.bathrooms?.toString(), level: ad?.level?.toString()
     })
     const product = await res.data;
-    console.log(product)
 }

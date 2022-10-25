@@ -66,9 +66,8 @@ export default function Apartment() {
             else {
                 setRequired(false)
                 await createApartmentAD({ ...values, images })
-                // console.log(values)
-                // router.push('/')
-                // formik.resetForm()
+                formik.resetForm()
+                router.push('/')
             }
         }
     })

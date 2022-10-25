@@ -10,6 +10,7 @@ import { useUser } from '@supabase/auth-helpers-react';
 import { createVehicleAD } from '../utils/API';
 import Location from './Location';
 import UploadPhoto from './UploadPhoto';
+import { useRouter } from 'next/router';
 
 function VehiclesBrand({ value, onChange, options }: { value: string, onChange: Function, options: { value: string, label: string }[] }) {
     const defaultValue = (options: { value: string, label: string }[], value: string) => {
@@ -30,6 +31,7 @@ export default function Vehicle() {
     const [loading, setLoading] = useState(false)
     const [counter, setCounter] = useState(0)
     const user = useUser()
+    const router = useRouter()
     useEffect(() => {
         setLoading(false)
     }, [images])
@@ -60,6 +62,8 @@ export default function Vehicle() {
             else {
                 setRequired(false)
                 await createVehicleAD({ ...values, images })
+                formik.resetForm()
+                router.push('/')
             }
         }
     })

@@ -1,11 +1,12 @@
 /* eslint-disable @next/next/no-img-element */
+import { useUser } from '@supabase/auth-helpers-react'
 import { useEffect, useState } from 'react'
 import io, { Socket } from 'Socket.IO-client'
 let socket: Socket
 const HomeChat = () => {
     const [input, setInput] = useState('')
     const [messages, setMessages] = useState<string[]>([])
-
+    const user = useUser()
     useEffect(() => {
         socketInitializer()
     }, [])
@@ -18,8 +19,9 @@ const HomeChat = () => {
             console.log('connected')
         })
 
+        socket.emit('joiningRoom', user?.id)
+
         socket.on('update-input', msg => {
-            console.log(msg);
             setMessages((oldVal) => [...oldVal, msg])
         })
     }

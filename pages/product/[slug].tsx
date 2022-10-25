@@ -4,7 +4,9 @@ import Image from 'next/image'
 import { GetStaticPaths, GetStaticProps } from 'next';
 import { prisma } from '../../lib/prisma'
 import { BiPhoneCall } from 'react-icons/Bi';
+import { BsChatDots } from 'react-icons/Bs';
 import ProductDetails from '../../components/ProductDetails';
+import Link from 'next/link';
 
 
 const Product = ({ products, product }: { products: any, product: any }) => {
@@ -36,15 +38,31 @@ const Product = ({ products, product }: { products: any, product: any }) => {
                     </div>
                 </div>
 
-                <div className="product-detail-desc">
+                <div className="product-detail-desc w-full sm:w-1/2">
                     <h1 className=' text-xl font-bold'>{title} - {brand}</h1>
                     <p>{description}</p>
                     <p className="text-xl text-right text-blue-600 font-bold">${price}</p>
-                    <div className='flex mt-10'>
-                        <a href="tel:+6199942413">
-                            call us
-                        </a>
-                        <BiPhoneCall size={'20px'} />
+                    <div className=' mt-10'>
+                        <button
+                            type="button"
+                            className="inline-flex items-center rounded border border-transparent bg-indigo-100 px-2.5 py-1.5 text-xs font-medium text-indigo-700 hover:bg-indigo-200 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+                        >
+                            <a href="tel:+6199942413" className='mx-2'>
+                                call
+                            </a>
+                            <BiPhoneCall size={'20px'} />
+                        </button>
+                        <button
+                            type="button"
+                            className="inline-flex mx-4 items-center rounded border border-transparent bg-indigo-100 px-2.5 py-1.5 text-xs font-medium text-indigo-700 hover:bg-indigo-200 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+                        >
+                            <Link href='/homeChat'>
+                                <a className='mx-2'>
+                                    Chat
+                                </a>
+                            </Link>
+                            <BsChatDots size={'20px'} />
+                        </button>
                     </div>
                 </div>
             </div>

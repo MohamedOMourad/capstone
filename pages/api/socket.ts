@@ -10,9 +10,25 @@ const SocketHandler = (req: any, res: any) => {
         res.socket.server.io = io
 
         io.on('connection', socket => {
+
+            socket.on('joiningRoom', (id) => {
+                console.log(`joining Room ${id}`)
+                socket.join(id)
+            })
+            // socket.on('sendMessage', (val) => {
+            //     // console.log(val)
+            //     val.userIds.forEach((id: number) => {
+            //         io.to(id.toString()).emit('receivedMessage', val.message)
+            //     })
+            // })
+
             socket.on('input-change', msg => {
-                console.log(msg)
-                socket.broadcast.emit('update-input', msg)
+                // console.log(msg)
+                const users = ['99bb8b49-57e3-4c07-967a-d3582a6aa741', 'f492dc23-ffa6-4abd-889b-f58ae4dad36d']
+                users.forEach((id) => {
+                    io.to(id).emit('update-input', msg)
+                })
+
             })
         })
     }
