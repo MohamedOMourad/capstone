@@ -1,7 +1,37 @@
 /* eslint-disable @next/next/no-img-element */
-import React, { useState } from 'react'
+import { useEffect, useState } from 'react'
+import io, { Socket } from 'Socket.IO-client'
+let socket: Socket
+const HomeChat = () => {
+    const [input, setInput] = useState('')
+    const [messages, setMessages] = useState<string[]>([])
 
-const homeChat = () => {
+    useEffect(() => {
+        socketInitializer()
+    }, [])
+
+    const socketInitializer = async () => {
+        await fetch('/api/socket')
+        socket = io()
+
+        socket.on('connect', () => {
+            console.log('connected')
+        })
+
+        socket.on('update-input', msg => {
+            console.log(msg);
+            setMessages((oldVal) => [...oldVal, msg])
+        })
+    }
+
+
+    const sendMessage = () => {
+        socket.emit('input-change', input)
+    }
+
+    const onChangeHandler = (e: any) => {
+        setInput(e.target.value)
+    }
     return (
         <div className="flex h-screen antialiased text-gray-800">
             <div className="flex flex-row h-full w-full overflow-x-hidden">
@@ -20,9 +50,9 @@ const homeChat = () => {
                                 xmlns="http://www.w3.org/2000/svg"
                             >
                                 <path
-                                    stroke-linecap="round"
-                                    stroke-linejoin="round"
-                                    stroke-width="2"
+                                    strokeLinecap="round"
+                                    strokeLinejoin="round"
+                                    strokeWidth="2"
                                     d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z"
                                 ></path>
                             </svg>
@@ -51,34 +81,38 @@ const homeChat = () => {
                         <div className="flex flex-col h-full overflow-x-auto mb-4">
                             <div className="flex flex-col h-full">
                                 <div className="grid grid-cols-12 gap-y-2">
-                                    <div className="col-start-1 col-end-8 p-3 rounded-lg">
-                                        <div className="flex flex-row items-center">
-                                            <div
-                                                className="flex items-center justify-center h-10 w-10 rounded-full bg-indigo-500 flex-shrink-0"
-                                            >
-                                                A
-                                            </div>
-                                            <div
-                                                className="relative ml-3 text-sm bg-white py-2 px-4 shadow rounded-xl"
-                                            >
-                                                <div>Hey How are you today?</div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div className="col-start-6 col-end-13 p-3 rounded-lg">
-                                        <div className="flex items-center justify-start flex-row-reverse">
-                                            <div
-                                                className="flex items-center justify-center h-10 w-10 rounded-full bg-indigo-500 flex-shrink-0"
-                                            >
-                                                A
-                                            </div>
-                                            <div
-                                                className="relative mr-3 text-sm bg-indigo-100 py-2 px-4 shadow rounded-xl"
-                                            >
-                                                <div>I am ok what about you?</div>
+                                    {messages.map((message, i) => (
+                                        <div key={i} className="col-start-1 col-end-8 p-3 rounded-lg">
+                                            <div className="flex flex-row items-center">
+                                                <div
+                                                    className="flex items-center justify-center h-10 w-10 rounded-full bg-indigo-500 flex-shrink-0"
+                                                >
+                                                    A
+                                                </div>
+                                                <div
+                                                    className="relative ml-3 text-sm bg-white py-2 px-4 shadow rounded-xl"
+                                                >
+                                                    <div>{message}</div>
+                                                </div>
                                             </div>
                                         </div>
-                                    </div>
+                                    ))
+
+                                        // <div className="col-start-6 col-end-13 p-3 rounded-lg">
+                                        //     <div className="flex items-center justify-start flex-row-reverse">
+                                        //         <div
+                                        //             className="flex items-center justify-center h-10 w-10 rounded-full bg-indigo-500 flex-shrink-0"
+                                        //         >
+                                        //             A
+                                        //         </div>
+                                        //         <div
+                                        //             className="relative mr-3 text-sm bg-indigo-100 py-2 px-4 shadow rounded-xl"
+                                        //         >
+                                        //             <div>I am ok what about you?</div>
+                                        //         </div>
+                                        //     </div>
+                                        // </div>
+                                    }
                                 </div>
                             </div>
                         </div>
@@ -89,30 +123,15 @@ const homeChat = () => {
                                 <div className="relative w-full">
                                     <input
                                         type="text"
+                                        value={input}
+                                        onChange={onChangeHandler}
                                         className="flex w-full border rounded-xl focus:outline-none focus:border-indigo-300 pl-4 h-10"
                                     />
-                                    <button
-                                        className="absolute flex items-center justify-center h-full w-12 right-0 top-0 text-gray-400 hover:text-gray-600"
-                                    >
-                                        <svg
-                                            className="w-6 h-6"
-                                            fill="none"
-                                            stroke="currentColor"
-                                            viewBox="0 0 24 24"
-                                            xmlns="http://www.w3.org/2000/svg"
-                                        >
-                                            <path
-                                                stroke-linecap="round"
-                                                stroke-linejoin="round"
-                                                stroke-width="2"
-                                                d="M14.828 14.828a4 4 0 01-5.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
-                                            ></path>
-                                        </svg>
-                                    </button>
                                 </div>
                             </div>
                             <div className="ml-4">
                                 <button
+                                    onClick={sendMessage}
                                     className="flex items-center justify-center bg-indigo-500 hover:bg-indigo-600 rounded-xl text-white px-4 py-1 flex-shrink-0"
                                 >
                                     <span>Send</span>
@@ -125,9 +144,9 @@ const homeChat = () => {
                                             xmlns="http://www.w3.org/2000/svg"
                                         >
                                             <path
-                                                stroke-linecap="round"
-                                                stroke-linejoin="round"
-                                                stroke-width="2"
+                                                strokeLinecap="round"
+                                                strokeLinejoin="round"
+                                                strokeWidth="2"
                                                 d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"
                                             ></path>
                                         </svg>
@@ -142,4 +161,4 @@ const homeChat = () => {
     );
 }
 
-export default homeChat;
+export default HomeChat;

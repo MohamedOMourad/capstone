@@ -7,26 +7,13 @@ import { prisma } from '../lib/prisma'
 import { useEffect } from 'react'
 import io from 'Socket.IO-client'
 import Chat from '../components/Chat'
-let socket
 const Home: NextPage = ({ products }: { products?: Product[] }) => {
 
-  useEffect(() => {
-    socketInitializer()
-  }, [])
 
-  const socketInitializer = async () => {
-    await fetch('/api/socket')
-    socket = io()
-
-    socket.on('connect', () => {
-      console.log('connected')
-    })
-  }
 
 
   return (
     <>
-      <Chat/>
       <Tap />
       <Hero />
       <Advertise products={products!} />
