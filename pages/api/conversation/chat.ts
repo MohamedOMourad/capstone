@@ -15,7 +15,6 @@ export default async function handler(
 ) {
     try {
         const { name, users } = req.body
-        console.log(name,users)
         switch (req.method) {
             case 'POST':
                 const chat = await prisma?.chat.create({
@@ -27,7 +26,7 @@ export default async function handler(
                 for (let i = 0; i < users.length; i++) {
                     const chatUsers = await prisma.user_Chat.create({
                         data: {
-                            userId: users[i],
+                            userId: users[i].id,
                             chatId: chat.id
                         }
                     })

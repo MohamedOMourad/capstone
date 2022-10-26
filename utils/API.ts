@@ -39,7 +39,12 @@ export const createApartmentAD = async (ad: Ad) => {
     const product = await res.data;
 }
 export const createChat = async (chat: any) => {
-    const res = await axios.post('http://localhost:3000/api/conversation/chat ', { ...chat })
+    const res = await axios.post('http://localhost:3000/api/conversation/chat', { ...chat })
     const createdChat = await res.data;
-    console.log(createdChat)
+    return createdChat;
+}
+export const createMessage = async (message: any) => {
+    const res = await axios.post('http://localhost:3000/api/conversation/message', { ...message })
+    const createdMessage = await res.data;
+    return createdMessage.message
 }

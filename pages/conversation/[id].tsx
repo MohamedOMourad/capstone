@@ -7,8 +7,9 @@ import { GetServerSideProps } from 'next'
 import { useEffect, useState } from 'react'
 import * as Yup from "yup";
 import { prisma } from '../../lib/prisma'
-import { createChat } from '../../utils/API'
-const Conversation = ({ users }: { users: string[] }) => {
+import { createChat, createMessage } from '../../utils/API'
+
+const Conversation = ({ users }: { users: User[] }) => {
     const [messages, setMessages] = useState<string[]>([])
     const formik = useFormik({
         initialValues: {
@@ -18,7 +19,10 @@ const Conversation = ({ users }: { users: string[] }) => {
             msg: Yup.string().required(),
         }),
         onSubmit: async (values) => {
-            await createChat({ name: users[1], users })
+            // await createChat({ name: users[1], users })
+            const sentMessage = await createMessage({ body: values.msg, userId: users[0].id, chatId: 1 })
+            console.log(sentMessage.body);
+            setMessages(oldMessage => [...oldMessage, sentMessage.body])
             formik.resetForm()
         },
     });
@@ -163,6 +167,6 @@ export const getServerSideProps: GetServerSideProps = withPageAuth({
             data: { user }
         } = await supabase.auth.getUser();
         const adUser = await prisma.user.findFirst({ where: { id: ctx.params?.id as string } })
-        return { props: { users: [user?.id, adUser?.id] } };
+        return { props: { users: [user, adUser] } };
     }
 });
