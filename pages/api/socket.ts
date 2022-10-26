@@ -12,7 +12,8 @@ const SocketHandler = (req: any, res: any) => {
         io.on('connection', socket => {
 
             socket.on('joiningRoom', (id) => {
-                console.log(`joining Room ${id}`)
+                console.log(`USer: ${id} joining Room`)
+                console.log(id)
                 socket.join(id)
             })
             // socket.on('sendMessage', (val) => {
@@ -24,9 +25,9 @@ const SocketHandler = (req: any, res: any) => {
 
             socket.on('input-change', msg => {
                 // console.log(msg)
-                const users = ['99bb8b49-57e3-4c07-967a-d3582a6aa741', 'f492dc23-ffa6-4abd-889b-f58ae4dad36d']
+                const users = ['99bb8b49-57e3-4c07-967a-d3582a6aa741', 'f492dc23-ffa6-4abd-889b-f58ae4dad36d', 'ec43fdba-0038-40d7-a97f-51fb6fe0e974']
                 users.forEach((id) => {
-                    io.to(id).emit('update-input', msg)
+                    io.to(id.toString()).emit('update-input', msg)
                 })
 
             })

@@ -56,7 +56,7 @@ const Product = ({ products, product }: { products: any, product: any }) => {
                             type="button"
                             className="inline-flex mx-4 items-center rounded border border-transparent bg-indigo-100 px-2.5 py-1.5 text-xs font-medium text-indigo-700 hover:bg-indigo-200 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
                         >
-                            <Link href='/homeChat'>
+                            <Link href={`/conversation/${product.user.id}`}>
                                 <a className='mx-2'>
                                     Chat
                                 </a>
@@ -98,7 +98,7 @@ export const getStaticPaths: GetStaticPaths = async () => {
 };
 
 export const getStaticProps: GetStaticProps = async ({ params }) => {
-    const products = await prisma?.product.findMany({ include: { images: true } })
+    const products = await prisma?.product.findMany({ include: { images: true, user: true } })
     const product = products?.find(product => product.id === +params?.slug!)
     return {
         props: { products: JSON.parse(JSON.stringify(products)), product: JSON.parse(JSON.stringify(product)) }

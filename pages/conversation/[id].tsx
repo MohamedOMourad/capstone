@@ -1,12 +1,16 @@
 /* eslint-disable @next/next/no-img-element */
 import { useUser } from '@supabase/auth-helpers-react'
+import { GetServerSideProps } from 'next'
 import { useEffect, useState } from 'react'
 import io, { Socket } from 'Socket.IO-client'
+import { prisma } from '../../lib/prisma'
+
 let socket: Socket
-const HomeChat = () => {
+const Conversation = () => {
     const [input, setInput] = useState('')
     const [messages, setMessages] = useState<string[]>([])
     const user = useUser()
+
     useEffect(() => {
         socketInitializer()
     }, [])
@@ -15,9 +19,7 @@ const HomeChat = () => {
         await fetch('/api/socket')
         socket = io()
 
-        socket.on('connect', () => {
-            console.log('connected')
-        })
+        console.log('connected')
 
         socket.emit('joiningRoom', user?.id)
 
@@ -34,6 +36,7 @@ const HomeChat = () => {
     const onChangeHandler = (e: any) => {
         setInput(e.target.value)
     }
+
     return (
         <div className="flex h-screen antialiased text-gray-800">
             <div className="flex flex-row h-full w-full overflow-x-hidden">
@@ -163,4 +166,12 @@ const HomeChat = () => {
     );
 }
 
-export default HomeChat;
+export default Conversation;
+
+export const getServerSideProps: GetServerSideProps = async ({ params }) => {
+    const user = await prisma.user.findFirst({ where: { id: params?.id! as string } })
+    console.log(user);
+    return {
+        props: { user: JSON.parse(JSON.stringify(user)) }, // will be passed to the page component as props
+    }
+}
