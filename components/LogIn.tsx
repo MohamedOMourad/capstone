@@ -5,7 +5,6 @@ import { useSessionContext, useUser } from '@supabase/auth-helpers-react';
 import { Dispatch, SetStateAction, useState } from 'react';
 import { createUSer } from "../utils/API";
 import { useRouter } from "next/router";
-import Email from "next-auth/providers/email";
 
 const SignUpFormik = () => {
     const { supabaseClient } = useSessionContext();

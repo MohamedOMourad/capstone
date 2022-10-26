@@ -79,13 +79,13 @@ export default function Header({ setOpen }: { setOpen: Dispatch<SetStateAction<b
                             {/* image logo */}
                             <div className="flex justify-start lg:w-0 lg:flex-1">
                                 <Link href={'/'}>
-                                <a >
-                                    <span className="sr-only">Your Company</span>
-                                    <img
-                                        className="h-8 w-auto sm:h-10"
-                                        src="https://tailwindui.com/img/logos/mark.svg?from-color=purple&from-shade=600&to-color=indigo&to-shade=600&toShade=600"
-                                        alt=""
-                                    />
+                                    <a >
+                                        <span className="sr-only">Your Company</span>
+                                        <img
+                                            className="h-8 w-auto sm:h-10"
+                                            src="https://tailwindui.com/img/logos/mark.svg?from-color=purple&from-shade=600&to-color=indigo&to-shade=600&toShade=600"
+                                            alt=""
+                                        />
                                     </a>
                                 </Link>
                             </div>
@@ -113,7 +113,7 @@ export default function Header({ setOpen }: { setOpen: Dispatch<SetStateAction<b
                                                 <span className="sr-only">Open user menu</span>
                                                 <img
                                                     className="h-8 w-8 rounded-full"
-                                                    src={"https://review2020.s3.amazonaws.com/360_F_346839683_6nAPzbhpSkIpb8pmAwufkC7c5eD7wYws.jpg" }
+                                                    src={"https://review2020.s3.amazonaws.com/360_F_346839683_6nAPzbhpSkIpb8pmAwufkC7c5eD7wYws.jpg"}
                                                     alt="Profile"
                                                 />
                                             </Menu.Button>
@@ -130,19 +130,36 @@ export default function Header({ setOpen }: { setOpen: Dispatch<SetStateAction<b
                                             <Menu.Items className="absolute right-0 z-10 mt-2 w-48 origin-top-right rounded-md bg-white py-1 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
                                                 <Menu.Item>
                                                     {({ active }) => (
-                                                        <p
-                                                            className={classNames(
-                                                                active ? "bg-gray-100" : "",
-                                                                "block px-4 py-2 text-sm text-gray-700 cursor-pointer",
-                                                                "hover:bg-gray-100"
-                                                            )}
-                                                            onClick={async () => {
-                                                                await supabaseClient.auth.signOut();
-                                                                router.push('/');
-                                                            }}
-                                                        >
-                                                            Sign out
-                                                        </p>
+                                                        <>
+                                                            <p
+                                                                className={classNames(
+                                                                    active ? "bg-gray-100" : "",
+                                                                    "block px-4 py-2 text-sm text-gray-700 cursor-pointer",
+                                                                    "hover:bg-gray-100"
+                                                                )}
+                                                            >{user?.email}</p>
+                                                            <p
+                                                                onClick={() => router.push('/conversations')}
+                                                                className={classNames(
+                                                                    active ? "bg-gray-100" : "",
+                                                                    "block px-4 py-2 text-sm text-gray-700 cursor-pointer",
+                                                                    "hover:bg-gray-100"
+                                                                )}
+                                                            >Conversation</p>
+                                                            <p
+                                                                className={classNames(
+                                                                    active ? "bg-gray-100" : "",
+                                                                    "block px-4 py-2 text-sm text-gray-700 cursor-pointer",
+                                                                    "hover:bg-gray-100"
+                                                                )}
+                                                                onClick={async () => {
+                                                                    await supabaseClient.auth.signOut();
+                                                                    router.push('/');
+                                                                }}
+                                                            >
+                                                                Sign out
+                                                            </p>
+                                                        </>
                                                     )}
                                                 </Menu.Item>
                                             </Menu.Items>
