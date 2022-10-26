@@ -5,11 +5,13 @@ import { useUser } from '@supabase/auth-helpers-react'
 import { useFormik } from 'formik'
 import { GetServerSideProps } from 'next'
 import { useEffect, useState } from 'react'
+import io, { Socket } from 'Socket.IO-client'
 import * as Yup from "yup";
 import { prisma } from '../../lib/prisma'
-import { createChat } from '../../utils/API'
-const Conversation = ({ users }: { users: string[] }) => {
+
+const Conversation = ({ userId }: { userId: string }) => {
     const [messages, setMessages] = useState<string[]>([])
+    const [socket, setSocket] = useState<Socket>()
     const formik = useFormik({
         initialValues: {
             msg: ''
@@ -18,10 +20,27 @@ const Conversation = ({ users }: { users: string[] }) => {
             msg: Yup.string().required(),
         }),
         onSubmit: async (values) => {
-            await createChat({ name: users[1], users })
+            socket?.emit('input-change', { msg: values.msg })
             formik.resetForm()
         },
     });
+
+    useEffect(() => {
+        socket?.emit('joiningRoom', userId)
+    }, [])
+    useEffect(() => {
+        socketInitializer()
+    }, [])
+
+    const socketInitializer = async () => {
+        await fetch('/api/socket')
+        setSocket(io())
+        console.log('connected')
+        socket?.on('update-input', msg => {
+            setMessages((oldVal) => [...oldVal, msg])
+        })
+    }
+
     return (
         <div className="flex h-screen antialiased text-gray-800">
             <div className="flex flex-row h-full w-full overflow-x-hidden">
@@ -155,14 +174,25 @@ const Conversation = ({ users }: { users: string[] }) => {
 
 export default Conversation;
 
-export const getServerSideProps: GetServerSideProps = withPageAuth({
+// export const getServerSideProps: GetServerSideProps = async ({ params }) => {
+//     const {
+//         data: { user }
+//     } = await supabase.auth.getUser();
+//     console.log(user);
+//     // const user = await prisma.user.findFirst({ where: { id: params?.id! as string } })
+//     return {
+//         props: { adUser: JSON.parse(JSON.stringify(user)) }, // will be passed to the page component as props
+//     }
+// }
+
+
+export const getServerSideProps = withPageAuth({
     redirectTo: '/',
     async getServerSideProps(ctx, supabase) {
         // Access the user object
         const {
             data: { user }
         } = await supabase.auth.getUser();
-        const adUser = await prisma.user.findFirst({ where: { id: ctx.params?.id as string } })
-        return { props: { users: [user?.id, adUser?.id] } };
+        return { props: { userId: user?.id } };
     }
 });

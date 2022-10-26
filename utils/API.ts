@@ -38,3 +38,8 @@ export const createApartmentAD = async (ad: Ad) => {
     })
     const product = await res.data;
 }
+export const createChat = async (chat: any) => {
+    const res = await axios.post('http://localhost:3000/api/conversation/chat ', { ...chat })
+    const createdChat = await res.data;
+    console.log(createdChat)
+}
