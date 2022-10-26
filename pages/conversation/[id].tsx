@@ -1,40 +1,44 @@
 /* eslint-disable @next/next/no-img-element */
+import { User } from '@prisma/client'
+import { withPageAuth } from '@supabase/auth-helpers-nextjs'
 import { useUser } from '@supabase/auth-helpers-react'
+import { useFormik } from 'formik'
 import { GetServerSideProps } from 'next'
 import { useEffect, useState } from 'react'
 import io, { Socket } from 'Socket.IO-client'
+import * as Yup from "yup";
 import { prisma } from '../../lib/prisma'
 
-let socket: Socket
-const Conversation = () => {
-    const [input, setInput] = useState('')
+const Conversation = ({ userId }: { userId: string }) => {
     const [messages, setMessages] = useState<string[]>([])
-    const user = useUser()
+    const [socket, setSocket] = useState<Socket>()
+    const formik = useFormik({
+        initialValues: {
+            msg: ''
+        },
+        validationSchema: Yup.object({
+            msg: Yup.string().required(),
+        }),
+        onSubmit: async (values) => {
+            socket?.emit('input-change', { msg: values.msg })
+            formik.resetForm()
+        },
+    });
 
+    useEffect(() => {
+        socket?.emit('joiningRoom', userId)
+    }, [])
     useEffect(() => {
         socketInitializer()
     }, [])
 
     const socketInitializer = async () => {
         await fetch('/api/socket')
-        socket = io()
-
+        setSocket(io())
         console.log('connected')
-
-        socket.emit('joiningRoom', user?.id)
-
-        socket.on('update-input', msg => {
+        socket?.on('update-input', msg => {
             setMessages((oldVal) => [...oldVal, msg])
         })
-    }
-
-
-    const sendMessage = () => {
-        socket.emit('input-change', input)
-    }
-
-    const onChangeHandler = (e: any) => {
-        setInput(e.target.value)
     }
 
     return (
@@ -128,15 +132,17 @@ const Conversation = () => {
                                 <div className="relative w-full">
                                     <input
                                         type="text"
-                                        value={input}
-                                        onChange={onChangeHandler}
+                                        name='msg'
+                                        value={formik.values.msg}
+                                        onChange={formik.handleChange}
                                         className="flex w-full border rounded-xl focus:outline-none focus:border-indigo-300 pl-4 h-10"
                                     />
                                 </div>
                             </div>
                             <div className="ml-4">
                                 <button
-                                    onClick={sendMessage}
+                                    type="button"
+                                    onClick={() => { formik.handleSubmit() }}
                                     className="flex items-center justify-center bg-indigo-500 hover:bg-indigo-600 rounded-xl text-white px-4 py-1 flex-shrink-0"
                                 >
                                     <span>Send</span>
@@ -168,10 +174,25 @@ const Conversation = () => {
 
 export default Conversation;
 
-export const getServerSideProps: GetServerSideProps = async ({ params }) => {
-    const user = await prisma.user.findFirst({ where: { id: params?.id! as string } })
-    console.log(user);
-    return {
-        props: { user: JSON.parse(JSON.stringify(user)) }, // will be passed to the page component as props
+// export const getServerSideProps: GetServerSideProps = async ({ params }) => {
+//     const {
+//         data: { user }
+//     } = await supabase.auth.getUser();
+//     console.log(user);
+//     // const user = await prisma.user.findFirst({ where: { id: params?.id! as string } })
+//     return {
+//         props: { adUser: JSON.parse(JSON.stringify(user)) }, // will be passed to the page component as props
+//     }
+// }
+
+
+export const getServerSideProps = withPageAuth({
+    redirectTo: '/',
+    async getServerSideProps(ctx, supabase) {
+        // Access the user object
+        const {
+            data: { user }
+        } = await supabase.auth.getUser();
+        return { props: { userId: user?.id } };
     }
-}
+});

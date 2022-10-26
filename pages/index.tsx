@@ -4,14 +4,7 @@ import Advertise from '../components/Advertise'
 import Hero from '../components/Hero'
 import Tap from '../components/Tap'
 import { prisma } from '../lib/prisma'
-import { useEffect } from 'react'
-import io from 'Socket.IO-client'
-import Chat from '../components/Chat'
 const Home: NextPage = ({ products }: { products?: Product[] }) => {
-
-
-
-
   return (
     <>
       <Tap />
