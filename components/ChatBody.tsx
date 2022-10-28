@@ -1,9 +1,32 @@
-import { Message } from '@prisma/client'
+import { Message, User, User_Chat } from '@prisma/client'
 import { useUser } from '@supabase/auth-helpers-react'
+import { useFormik } from 'formik';
 import React from 'react'
+import * as Yup from "yup";
+import { useAppSelector } from '../redux/app/hooks';
 
-const ChatBody = ({ formik, messages }: { formik: any, messages: Message[] }) => {
+const MessageFormik = (chatUsers: User_Chat[]) => {
+    const socket = useAppSelector((state) => state.socketConnection.socket)
+    const id = useAppSelector((state) => state.socketConnection.id)
+    const formik = useFormik({
+        initialValues: {
+            msg: ''
+        },
+        validationSchema: Yup.object({
+            msg: Yup.string().required(),
+        }),
+        onSubmit: async (values) => {
+            socket?.emit("send_message", { users: [chatUsers[0].userId, chatUsers[1].userId], msg: values.msg });
+            formik.resetForm()
+        },
+    });
+    return formik;
+}
+const ChatBody = ({ messages, chatUsers }: { messages: string[], chatUsers: User_Chat[] }) => {
+    const formik = MessageFormik(chatUsers)
+
     const user = useUser()
+
     return (
         <div className="flex flex-col flex-auto h-full p-6">
             <div className="flex flex-col flex-auto flex-shrink-0 rounded-2xl bg-gray-100 h-full p-4">
@@ -12,37 +35,52 @@ const ChatBody = ({ formik, messages }: { formik: any, messages: Message[] }) =>
                     <div className="flex flex-col h-full">
                         <div className="grid grid-cols-12 gap-y-2">
                             {messages.map((message, i) => (
-                                <>
-                                    {user?.id === message.userId ? <div key={i} className="col-start-6 col-end-13 p-3 rounded-lg">
-                                        <div className="flex items-center justify-start flex-row-reverse">
-                                            <div
-                                                className="flex items-center justify-center h-10 w-10 rounded-full bg-indigo-500 flex-shrink-0"
-                                            >
-                                                A
-                                            </div>
-                                            <div
-                                                className="relative mr-3 text-sm bg-indigo-100 py-2 px-4 shadow rounded-xl"
-                                            >
-                                                <div>{message.body}</div>
-                                            </div>
+                                // <div key={i}>
+                                //     {user?.id ?
+                                //         <div className="col-start-6 col-end-13 p-3 rounded-lg">
+                                //             <div className="flex items-center justify-start flex-row-reverse">
+                                //                 <div
+                                //                     className="flex items-center justify-center h-10 w-10 rounded-full bg-indigo-500 flex-shrink-0"
+                                //                 >
+                                //                     A
+                                //                 </div>
+                                //                 <div
+                                //                     className="relative mr-3 text-sm bg-indigo-100 py-2 px-4 shadow rounded-xl"
+                                //                 >
+                                //                     <div>{message}</div>
+                                //                 </div>
+                                //             </div>
+                                //         </div> :
+                                //         <div
+                                //             className="col-start-1 col-end-8 p-3 rounded-lg" >
+                                //             <div className="flex flex-row items-center">
+                                //                 <div
+                                //                     className="flex items-center justify-center h-10 w-10 rounded-full bg-indigo-500 flex-shrink-0"
+                                //                 >
+                                //                     A
+                                //                 </div>
+                                //                 <div
+                                //                     className="relative ml-3 text-sm bg-white py-2 px-4 shadow rounded-xl"
+                                //                 >
+                                //                     <div>{message}</div>
+                                //                 </div>
+                                //             </div>
+                                //         </div>}
+                                // </div>
+                                <div key={i} className="col-start-6 col-end-13 p-3 rounded-lg">
+                                    <div className="flex items-center justify-start flex-row-reverse">
+                                        <div
+                                            className="flex items-center justify-center h-10 w-10 rounded-full bg-indigo-500 flex-shrink-0"
+                                        >
+                                            A
                                         </div>
-                                    </div> :
-                                        <div key={i} className="col-start-1 col-end-8 p-3 rounded-lg" >
-                                            <div className="flex flex-row items-center">
-                                                <div
-                                                    className="flex items-center justify-center h-10 w-10 rounded-full bg-indigo-500 flex-shrink-0"
-                                                >
-                                                    A
-                                                </div>
-                                                <div
-                                                    className="relative ml-3 text-sm bg-white py-2 px-4 shadow rounded-xl"
-                                                >
-                                                    <div>{message.body}</div>
-                                                </div>
-                                            </div>
-                                        </div>}
-                                </>
-
+                                        <div
+                                            className="relative mr-3 text-sm bg-indigo-100 py-2 px-4 shadow rounded-xl"
+                                        >
+                                            <div>{message}</div>
+                                        </div>
+                                    </div>
+                                </div>
 
 
 

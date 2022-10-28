@@ -1,44 +1,43 @@
 /* eslint-disable @next/next/no-img-element */
 import { Chat, Message, User, User_Chat } from '@prisma/client'
 import { withPageAuth } from '@supabase/auth-helpers-nextjs'
+import { useUser } from '@supabase/auth-helpers-react'
+import { useFormik } from 'formik'
 import { GetServerSideProps } from 'next'
 import { useEffect, useState } from 'react'
+import * as Yup from "yup";
 import ChatBody from '../components/ChatBody'
 import { prisma } from '../lib/prisma'
-import { useAppDispatch, useAppSelector } from '../redux/app/hooks'
-import { openSocket } from '../redux/socket io/socket'
+import { createChat, createMessage } from '../utils/API'
 
 const Conversation = ({ user, chats }: {
     user: (User & { chats: User_Chat[] }),
-    chats: (Chat & { messages: Message[]; users: User_Chat[]; })[]
+    chats: (Chat & { messages: Message[]; })[]
 }) => {
-    const dispatch = useAppDispatch()
-    const socket = useAppSelector((state) => state.socketConnection.socket)
-    const [messageList, setMessageList] = useState<string[]>([]);
-    const [chatUsers, setChatUsers] = useState<User_Chat[]>([]);
-    console.log(socket);
-    useEffect(() => {
-        if (user) dispatch(openSocket(user.id));
-    }, [user]);
-
-    useEffect(() => {
-        socket?.emit("join_room", user.id);
-    }, [])
-
-    useEffect(() => {
-        socket?.on("receive_message", (data) => {
-            console.log(data)
-            setMessageList((list) => [...list, data]);
-        });
-    }, []);
-
-    const getSelectedChat = (id: number) => {
+    const [messages, setMessages] = useState<Message[]>([])
+    // console.log(user)
+    // console.log(chats)
+    const getChatId = (id: number) => {
         // console.log(id);
         const selectedChat = chats.find((chat) => chat.id === id)
-        console.log(selectedChat)
-        setChatUsers(selectedChat?.users!)
-        // setMessages(selectedChat?.messages!)
+        // console.log(selectedChat)
+        setMessages(selectedChat?.messages!)
     }
+    const formik = useFormik({
+        initialValues: {
+            msg: ''
+        },
+        validationSchema: Yup.object({
+            msg: Yup.string().required(),
+        }),
+        onSubmit: async (values) => {
+            // await createChat({ name: users[1], users })
+            // const sentMessage = await createMessage({ body: values.msg, userId: users[0].id, chatId: 1 })
+            // console.log(sentMessage.body);
+            // setMessages(oldMessage => [...oldMessage, sentMessage.body])
+            // formik.resetForm()
+        },
+    });
     return (
         <div className="flex h-screen antialiased text-gray-800">
             <div className="flex flex-row h-full w-full overflow-x-hidden">
@@ -73,7 +72,7 @@ const Conversation = ({ user, chats }: {
                             {user.chats.map((chat) => (
                                 <button
                                     key={chat.id}
-                                    onClick={() => getSelectedChat(chat.chatId)}
+                                    onClick={() => getChatId(chat.chatId)}
                                     className="flex flex-row items-center hover:bg-gray-100 rounded-xl p-2"
                                 >
                                     <div
@@ -86,8 +85,7 @@ const Conversation = ({ user, chats }: {
                         </div>
                     </div>
                 </div>
-                {/* <ChatBody formik={formik} messages={messages} /> */}
-                <ChatBody chatUsers={chatUsers} messages={messageList} />
+                <ChatBody formik={formik} messages={messages} />
             </div>
         </div>
     );
@@ -103,7 +101,7 @@ export const getServerSideProps: GetServerSideProps = withPageAuth({
             data: { user }
         } = await supabase.auth.getUser();
         const logUser = await prisma.user.findFirst({ where: { id: user?.id }, include: { chats: true } })
-        const chats = await prisma.chat.findMany({ include: { messages: true, users: true } })
+        const chats = await prisma.chat.findMany({ include: { messages: true } })
         return { props: { user: JSON.parse(JSON.stringify(logUser)), chats: JSON.parse(JSON.stringify(chats)) } };
     }
 });
