@@ -14,7 +14,7 @@ const Conversation = ({ user, chats }: {
 }) => {
     const dispatch = useAppDispatch()
     const socket = useAppSelector((state) => state.socketConnection.socket)
-    const [messageList, setMessageList] = useState<string[]>([]);
+    const [messageList, setMessageList] = useState<Message[]>([]);
     const [chatUsers, setChatUsers] = useState<User_Chat[]>([]);
     console.log(socket);
     useEffect(() => {
@@ -37,7 +37,7 @@ const Conversation = ({ user, chats }: {
         const selectedChat = chats.find((chat) => chat.id === id)
         console.log(selectedChat)
         setChatUsers(selectedChat?.users!)
-        // setMessages(selectedChat?.messages!)
+        setMessageList(selectedChat?.messages!)
     }
     return (
         <div className="flex h-screen antialiased text-gray-800">
