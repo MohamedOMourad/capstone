@@ -16,6 +16,7 @@ const Conversation = ({ user, chats }: {
     const socket = useAppSelector((state) => state.socketConnection.socket)
     const [messageList, setMessageList] = useState<Message[]>([]);
     const [chatUsers, setChatUsers] = useState<User_Chat[]>([]);
+    const [activeChat, setActiveChat] = useState(false);
     console.log(socket);
     useEffect(() => {
         if (user) dispatch(openSocket(user.id));
@@ -38,6 +39,7 @@ const Conversation = ({ user, chats }: {
         console.log(selectedChat)
         setChatUsers(selectedChat?.users!)
         setMessageList(selectedChat?.messages!)
+        setActiveChat(true)
     }
     return (
         <div className="flex h-screen antialiased text-gray-800">
@@ -86,8 +88,7 @@ const Conversation = ({ user, chats }: {
                         </div>
                     </div>
                 </div>
-                {/* <ChatBody formik={formik} messages={messages} /> */}
-                <ChatBody chatUsers={chatUsers} messages={messageList} />
+                {activeChat && <ChatBody chatUsers={chatUsers} messages={messageList} />}
             </div>
         </div>
     );

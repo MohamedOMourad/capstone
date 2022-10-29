@@ -20,7 +20,6 @@ import { useSessionContext, useUser } from '@supabase/auth-helpers-react'
 import { useRouter } from 'next/router'
 import Link from 'next/link'
 import { classNames } from '../constant'
-import { createBrowserSupabaseClient } from '@supabase/auth-helpers-nextjs'
 
 const navigation = [
     { name: 'Vehicles', href: '#', activeStatus: 0 },
