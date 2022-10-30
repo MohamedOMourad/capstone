@@ -1,18 +1,4 @@
 /* eslint-disable @next/next/no-img-element */
-/*
-  This example requires some changes to your config:
-  
-  ```
-  // tailwind.config.js
-  module.exports = {
-    // ...
-    plugins: [
-      // ...
-      require('@tailwindcss/forms'),
-    ],
-  }
-  ```
-*/
 import { Dispatch, Fragment, SetStateAction, useState } from 'react'
 import { Menu, Popover, Transition } from '@headlessui/react'
 import { Bars3Icon, XMarkIcon, } from '@heroicons/react/24/outline'
@@ -32,9 +18,9 @@ const navigation = [
 
 const Search = () => {
     return (
-        <div className=" flex justify-start items-center py-1 relative">
+        <div className=" flex justify-center items-center px-1 py-1 relative">
             <input
-                className="text-sm leading-none text-left text-gray-600 px-4 py-3 w-full border rounded border-gray-300  outline-none"
+                className="text-sm leading-none text-gray-600 px-4 py-3 w-full border rounded border-gray-300  outline-none"
                 type="text"
                 placeholder="Search"
             />
@@ -74,29 +60,29 @@ export default function Header({ setOpen }: { setOpen: Dispatch<SetStateAction<b
             <div className="bg-white">
                 <header>
                     <Popover className="relative bg-white">
-                        <div className="px-5 flex  items-center justify-between ">
+                        <div className="px-5 flex justify-between items-center">
                             {/* image logo */}
-                            <div className="flex justify-start lg:w-0 lg:flex-1">
+                            <div className="md:flex-1">
                                 <Link href={'/'}>
                                     <a >
                                         <span className="sr-only">Your Company</span>
                                         <img
-                                            className="h-8 w-auto sm:h-10"
-                                            src="https://tailwindui.com/img/logos/mark.svg?from-color=purple&from-shade=600&to-color=indigo&to-shade=600&toShade=600"
+                                            className="h-6 w-auto sm:h-8"
+                                            src="https://kjwldcclontmioflpfvx.supabase.co/storage/v1/object/public/img/C2C.png"
                                             alt=""
                                         />
                                     </a>
                                 </Link>
                             </div>
                             {/* burger Icon */}
-                            <div className="-my-2 -mr-2 md:hidden">
+                            <div className="my-2 -mr-2 md:hidden">
                                 <Popover.Button className="inline-flex items-center justify-center rounded-md bg-white p-2 text-gray-400 hover:bg-gray-100 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-indigo-500">
                                     <span className="sr-only">Open menu</span>
                                     <Bars3Icon className="h-6 w-6" aria-hidden="true" />
                                 </Popover.Button>
                             </div>
                             {/* Search */}
-                            <Popover.Group as="nav" className="hidden space-x-10 md:flex">
+                            <Popover.Group as="nav" className="hidden  sm:flex">
                                 <Popover className="relative">
                                     <Search />
                                 </Popover>
@@ -199,12 +185,79 @@ export default function Header({ setOpen }: { setOpen: Dispatch<SetStateAction<b
                                     <div className="px-5 pt-5 pb-6">
                                         <div className="flex items-center justify-between">
                                             <div>
-                                                <img
-                                                    className="h-8 w-auto"
-                                                    src="https://tailwindui.com/img/logos/mark.svg?from-color=purple&from-shade=600&to-color=indigo&to-shade=600&toShade=600"
-                                                    alt="Your Company"
-                                                />
+                                                <Link href={'/'}>
+                                                    <a >
+                                                        <span className="sr-only">Your Company</span>
+                                                        <img
+                                                            className="h-6 w-auto sm:h-8"
+                                                            src="https://kjwldcclontmioflpfvx.supabase.co/storage/v1/object/public/img/C2C.png"
+                                                            alt=""
+                                                        />
+                                                    </a>
+                                                </Link>
                                             </div>
+                                            {!user ? <button onClick={() => setOpen(true)} className="whitespace-nowrap text-base font-medium text-gray-500 hover:text-gray-900">
+                                                Sign in
+                                            </button> :
+                                                <Menu as="div" className="relative ml-3">
+                                                    <div>
+                                                        <Menu.Button className="flex max-w-xs items-center rounded-full bg-white text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">
+                                                            <span className="sr-only">Open user menu</span>
+                                                            <img
+                                                                className="h-8 w-8 rounded-full"
+                                                                src={"https://review2020.s3.amazonaws.com/360_F_346839683_6nAPzbhpSkIpb8pmAwufkC7c5eD7wYws.jpg"}
+                                                                alt="Profile"
+                                                            />
+                                                        </Menu.Button>
+                                                    </div>
+                                                    <Transition
+                                                        as={Fragment}
+                                                        enter="transition ease-out duration-100"
+                                                        enterFrom="transform opacity-0 scale-95"
+                                                        enterTo="transform opacity-100 scale-100"
+                                                        leave="transition ease-in duration-75"
+                                                        leaveFrom="transform opacity-100 scale-100"
+                                                        leaveTo="transform opacity-0 scale-95"
+                                                    >
+                                                        <Menu.Items className="absolute right-0 z-10 mt-2 w-48 origin-top-right rounded-md bg-white py-1 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
+                                                            <Menu.Item>
+                                                                {({ active }) => (
+                                                                    <>
+                                                                        <p
+                                                                            className={classNames(
+                                                                                active ? "bg-gray-100" : "",
+                                                                                "block px-4 py-2 text-sm text-gray-700 cursor-pointer",
+                                                                                "hover:bg-gray-100"
+                                                                            )}
+                                                                        >{user?.email}</p>
+                                                                        <p
+                                                                            onClick={() => router.push('/conversations')}
+                                                                            className={classNames(
+                                                                                active ? "bg-gray-100" : "",
+                                                                                "block px-4 py-2 text-sm text-gray-700 cursor-pointer",
+                                                                                "hover:bg-gray-100"
+                                                                            )}
+                                                                        >Conversation</p>
+                                                                        <p
+                                                                            className={classNames(
+                                                                                active ? "bg-gray-100" : "",
+                                                                                "block px-4 py-2 text-sm text-gray-700 cursor-pointer",
+                                                                                "hover:bg-gray-100"
+                                                                            )}
+                                                                            onClick={async () => {
+                                                                                await supabaseClient.auth.signOut();
+                                                                                router.push('/');
+                                                                            }}
+                                                                        >
+                                                                            Sign out
+                                                                        </p>
+                                                                    </>
+                                                                )}
+                                                            </Menu.Item>
+                                                        </Menu.Items>
+                                                    </Transition>
+                                                </Menu>
+                                            }
                                             <div className="-mr-2">
                                                 <Popover.Button className="inline-flex items-center justify-center rounded-md bg-white p-2 text-gray-400 hover:bg-gray-100 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-indigo-500">
                                                     <span className="sr-only">Close menu</span>
@@ -232,9 +285,6 @@ export default function Header({ setOpen }: { setOpen: Dispatch<SetStateAction<b
                                                 className="flex w-full items-center justify-center rounded-md border border-transparent bg-gradient-to-r from-purple-600 to-indigo-600 bg-origin-border px-4 py-2 text-base font-medium text-white shadow-sm hover:from-purple-700 hover:to-indigo-700"
                                             >
                                                 + SELL
-                                            </button>
-                                            <button onClick={() => setOpen(true)} className="text-center">
-                                                Sign in
                                             </button>
                                         </div>
                                     </div>
