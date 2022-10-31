@@ -9,13 +9,8 @@ const ProductDetails = ({ product }: { product: any }) => {
     return (
         <div>
             <Link href={`/product/${product.id}`}>
-                <div className="product-card">
-                    <img
-                        src={product.images && product.images[0].imgUrl}
-                        width={250}
-                        height={250}
-                        className="product-image"
-                    />
+                <div className=" product-card ">
+                    <div style={{ backgroundImage: `url(${product.images && product.images[0].imgUrl})` }} className='bg-cover bg-center w-[250px] h-[200px]  overflow-hidden product-image'/>
                     <p className="product-name">{product.title}</p>
                     <p className="product-price">${product.price}</p>
                 </div>

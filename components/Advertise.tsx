@@ -11,7 +11,7 @@ export default function Advertise({ products }: { products: Product[] }) {
     return (
         <div className="bg-gray-100">
             <div className="mx-auto container py-8">
-                <div className="flex flex-wrap items-center lg:justify-between justify-center">
+                <div className="flex flex-wrap items-center md:justify-start justify-center">
                     {products.map((product: any, i: any) => (
                         <div key={i} className="mx-2 w-72 lg:mb-0 mb-8 ">
                             <Link href={`product/${product.id}`}>
