@@ -1,4 +1,6 @@
 import React, { useState } from 'react';
+import { useAppDispatch } from '../redux/app/hooks';
+import { filterProducts } from '../redux/product/product';
 
 const navigation = [
     { name: 'All', href: '#', activeStatus: 0 },
@@ -10,7 +12,8 @@ const navigation = [
     { name: 'Fashion & Beauty', href: '#', activeStatus: 6 },
 ]
 
-const Tap = ({ filterProducts }: { filterProducts: Function }) => {
+const Tap = () => {
+    const dispatch = useAppDispatch();
     const [activeStatus, setActiveStatus] = useState(0);
     return (
         <>
@@ -22,7 +25,7 @@ const Tap = ({ filterProducts }: { filterProducts: Function }) => {
                         <polyline points="16 15 12 19 8 15" />
                     </svg>
                 </div>
-                <select onChange={e => filterProducts(e.target.value)} aria-label="Selected tab" className="form-select block w-full p-3 border border-gray-300 rounded text-gray-600 appearance-none bg-transparent relative z-10">
+                <select onChange={e => dispatch(filterProducts(e.target.value))} aria-label="Selected tab" className="form-select block w-full p-3 border border-gray-300 rounded text-gray-600 appearance-none bg-transparent relative z-10">
                     {navigation.map((item) => (
                         <option key={item.activeStatus} className="text-sm text-gray-600">{item.name} </option>
                     ))}
@@ -31,7 +34,7 @@ const Tap = ({ filterProducts }: { filterProducts: Function }) => {
             <div className="sm:w-full sm:mx-0 h-12 hidden lg:block bg-white shadow rounded">
                 <ul className="flex justify-center border-b px-5">
                     {navigation.map((item, index) => (
-                        <li key={item.name} onClick={() => { setActiveStatus(item.activeStatus), filterProducts(item.name) }} className={activeStatus == index ? "text-sm border-indigo-700 pt-3 rounded-t text-indigo-700 mr-12" : "text-sm text-gray-600 py-3 flex items-center mr-12 hover:text-indigo-700 cursor-pointer"}>
+                        <li key={item.name} onClick={() => { setActiveStatus(item.activeStatus), dispatch(filterProducts(item.name)) }} className={activeStatus == index ? "text-sm border-indigo-700 pt-3 rounded-t text-indigo-700 mr-12" : "text-sm text-gray-600 py-3 flex items-center mr-12 hover:text-indigo-700 cursor-pointer"}>
                             <div className="flex items-center mb-3">
                                 <span>
                                     <svg xmlns="http://www.w3.org/2000/svg" className="icon icon-tabler icon-tabler-home" width={16} height={16} viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" fill="none" strokeLinecap="round" strokeLinejoin="round">

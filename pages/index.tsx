@@ -2,49 +2,33 @@ import { Product } from '@prisma/client'
 import { useUser } from '@supabase/auth-helpers-react'
 import type { NextPage } from 'next'
 import { useEffect, useState } from 'react'
+import { useDispatch } from 'react-redux'
 import Advertise from '../components/Advertise'
 import Hero from '../components/Hero'
 import Tap from '../components/Tap'
 import { prisma } from '../lib/prisma'
 import { useAppDispatch, useAppSelector } from '../redux/app/hooks'
+import { setProducts } from '../redux/product/product'
 import { openSocket } from '../redux/socket io/socket'
 const Home: NextPage = ({ products }: { products?: Product[] }) => {
-  const [filteredProduct, setFilteredProduct] = useState(products)
-  const id = useAppSelector((state) => state.socketConnection.id)
-  const dispatch = useAppDispatch()
+  // const [filteredProduct, setFilteredProduct] = useState(products)
+  const dispatch = useAppDispatch();
+  const filteredProduct = useAppSelector((state) => state.product.filteredProducts)
   const user = useUser();
   useEffect(() => {
+    dispatch(setProducts(products!))
     // Only run query once user is logged in.
     if (user) dispatch(openSocket(user.id));
   }, [user]);
 
   const filterProducts = (filter: string) => {
     console.log(filter)
-    switch (filter) {
-      case 'All':
-        setFilteredProduct(products);
-        break;
-      case 'Vehicles':
-        const vehicles = products?.filter((product) => product.categoryId === 1)
-        setFilteredProduct(vehicles);
-        break;
-      case 'Properties':
-        const Properties = products?.filter((product) => product.categoryId === 3)
-        setFilteredProduct(Properties);
-        break;
-      case 'Mobile Phones':
-        const MobilePhones = products?.filter((product) => product.categoryId === 2)
-        setFilteredProduct(MobilePhones);
-        break;
-      default:
-        const searchedProducts = products?.filter((product) => product.brand?.indexOf(filter)! >= 0)
-        setFilteredProduct(searchedProducts);
-    }
+
   }
   return (
     <>
-      <Tap filterProducts={filterProducts} />
-      <Hero />
+      <Tap />
+      {/* <Hero /> */}
       <Advertise products={filteredProduct!} />
     </>
   )

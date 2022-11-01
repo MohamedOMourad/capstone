@@ -1,9 +1,11 @@
 import { configureStore } from "@reduxjs/toolkit";
 import socketConnection from "../socket io/socket";
+import product from "../product/product";
 
 export const store = configureStore({
     reducer: {
-        socketConnection,
+        socketConnection, 
+        product
     },
 
 });

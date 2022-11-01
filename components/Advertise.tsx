@@ -9,11 +9,11 @@ import Link from "next/link";
 export default function Advertise({ products }: { products: Product[] }) {
     const [isLoading, setLoading] = useState(true)
     return (
-        <div className="bg-gray-100">
-            <div className="mx-auto container py-8">
-                <div className="flex flex-wrap items-center md:justify-start justify-center">
+        <div className="bg-gray-100 py-8">
+            <div className="mx-auto container ">
+                <div className="  grid  items-center md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5">
                     {products.map((product: any, i: any) => (
-                        <div key={i} className="mx-2 w-72 lg:mb-0 mb-8 ">
+                        <div key={i} className="mx-auto w-72">
                             <Link href={`product/${product.id}`}>
                                 <a className="group">
                                     <div className="aspect-w-1 aspect-h-1 w-full overflow-hidden  bg-gray-200 xl:aspect-w-5 xl:aspect-h-3">

@@ -6,11 +6,15 @@ import { useSessionContext, useUser } from '@supabase/auth-helpers-react'
 import { useRouter } from 'next/router'
 import Link from 'next/link'
 import { classNames } from '../constant'
+import { useAppDispatch, useAppSelector } from '../redux/app/hooks'
+import { filterProducts } from '../redux/product/product'
 
 const Search = () => {
+    const dispatch = useAppDispatch();
     return (
         <div className=" flex justify-center items-center px-1 py-1 relative">
             <input
+                onKeyUp={(e: any) => { dispatch(filterProducts(e.target.value)) }}
                 className="text-sm leading-none text-gray-600 px-4 py-3 w-full border rounded border-gray-300  outline-none"
                 type="text"
                 placeholder="Search"
