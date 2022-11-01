@@ -7,15 +7,6 @@ import { useRouter } from 'next/router'
 import Link from 'next/link'
 import { classNames } from '../constant'
 
-const navigation = [
-    { name: 'Vehicles', href: '#', activeStatus: 0 },
-    { name: 'Properties', href: '#', activeStatus: 1 },
-    { name: 'Mobile Phones', href: '#', activeStatus: 2 },
-    { name: 'Electronics', href: '#', activeStatus: 3 },
-    { name: 'Furniture', href: '#', activeStatus: 4 },
-    { name: 'Fashion & Beauty', href: '#', activeStatus: 5 },
-]
-
 const Search = () => {
     return (
         <div className=" flex justify-center items-center px-1 py-1 relative">
@@ -268,17 +259,6 @@ export default function Header({ setOpen }: { setOpen: Dispatch<SetStateAction<b
                                     </div>
                                     <Search />
                                     <div className="py-6 px-5">
-                                        <div className="px-2 pt-2 pb-3">
-                                            {navigation.map((item) => (
-                                                <a
-                                                    key={item.name}
-                                                    href={item.href}
-                                                    className="block rounded-md px-3 py-2 text-base font-medium text-gray-700 hover:bg-gray-50 hover:text-gray-900"
-                                                >
-                                                    {item.name}
-                                                </a>
-                                            ))}
-                                        </div>
                                         <div className="mt-6">
                                             <button
                                                 onClick={() => setOpen(true)}
