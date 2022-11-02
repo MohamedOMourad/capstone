@@ -1,4 +1,19 @@
 /* eslint-disable @next/next/no-img-element */
+/*
+  This example requires some changes to your config:
+  
+  ```
+  // tailwind.config.js
+  module.exports = {
+    // ...
+    plugins: [
+      // ...
+      require('@tailwindcss/forms'),
+    ],
+  }
+  ```
+*/
+/* eslint-disable @next/next/no-img-element */
 import { Chat, Message, User, User_Chat } from '@prisma/client'
 import { withPageAuth } from '@supabase/auth-helpers-nextjs'
 import { GetServerSideProps } from 'next'
@@ -7,17 +22,28 @@ import ChatBody from '../components/ChatBody'
 import { prisma } from '../lib/prisma'
 import { useAppDispatch, useAppSelector } from '../redux/app/hooks'
 import { openSocket } from '../redux/socket io/socket'
+import { Fragment } from 'react'
+import { Dialog, Transition } from '@headlessui/react'
+import {
+    Bars3BottomLeftIcon,
+    XMarkIcon,
+} from '@heroicons/react/24/outline'
 
-const Conversation = ({ user, chats }: {
+export default function Conversation({ user, chats }: {
     user: (User & { chats: User_Chat[] }),
     chats: (Chat & { messages: Message[]; users: User_Chat[]; })[]
-}) => {
-    const dispatch = useAppDispatch()
-    const socket = useAppSelector((state) => state.socketConnection.socket)
+}) {
+
     const [messageList, setMessageList] = useState<Message[]>([]);
     const [chatUsers, setChatUsers] = useState<User_Chat[]>([]);
     const [activeChat, setActiveChat] = useState(false);
-    console.log(socket);
+
+    const dispatch = useAppDispatch()
+    const socket = useAppSelector((state) => state.socketConnection.socket)
+
+    // console.log(socket);
+    console.log(user);
+    console.log(chats);
     useEffect(() => {
         if (user) dispatch(openSocket(user.id));
     }, [user]);
@@ -41,60 +67,147 @@ const Conversation = ({ user, chats }: {
         setMessageList(selectedChat?.messages!)
         setActiveChat(true)
     }
-    return (
-        <div className="flex h-screen antialiased text-gray-800">
-            <div className="flex flex-row h-full w-full overflow-x-hidden">
-                {/* users */}
-                <div className="flex flex-col py-8 pl-6 pr-2 w-64 bg-white flex-shrink-0">
-                    {/* QuickChat */}
-                    <div className="flex flex-row items-center justify-start h-12 w-full">
-                        <div
-                            className="flex items-center justify-center rounded-2xl text-indigo-700 bg-indigo-100 h-10 w-10"
-                        >
-                            <svg
-                                className="w-6 h-6"
-                                fill="none"
-                                stroke="currentColor"
-                                viewBox="0 0 24 24"
-                                xmlns="http://www.w3.org/2000/svg"
-                            >
-                                <path
-                                    strokeLinecap="round"
-                                    strokeLinejoin="round"
-                                    strokeWidth="2"
-                                    d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z"
-                                ></path>
-                            </svg>
-                        </div>
-                        <div className="ml-2 font-bold text-2xl">QuickChat</div>
-                    </div>
-                    {/* users */}
-                    <div className="flex flex-col mt-8">
-                        <div className="flex flex-col space-y-1 mt-4 -mx-2 h-48 overflow-y-auto">
+    const [sidebarOpen, setSidebarOpen] = useState(false)
 
-                            {user.chats.map((chat) => (
-                                <button
-                                    key={chat.id}
-                                    onClick={() => getSelectedChat(chat.chatId)}
-                                    className="flex flex-row items-center hover:bg-gray-100 rounded-xl p-2"
-                                >
-                                    <div
-                                        className="flex items-center justify-center h-8 w-8 bg-indigo-200 rounded-full"
+    return (
+        <>
+            {/*
+        This example requires updating your template:
+
+        ```
+        <html class="h-full bg-gray-100">
+        <body class="h-full">
+        ```
+      */}
+            <div>
+                <Transition.Root show={sidebarOpen} as={Fragment}>
+                    <Dialog as="div" className="relative z-40 md:hidden" onClose={setSidebarOpen}>
+                        <Transition.Child
+                            as={Fragment}
+                            enter="transition-opacity ease-linear duration-300"
+                            enterFrom="opacity-0"
+                            enterTo="opacity-100"
+                            leave="transition-opacity ease-linear duration-300"
+                            leaveFrom="opacity-100"
+                            leaveTo="opacity-0"
+                        >
+                            <div className="fixed inset-0 bg-gray-600 bg-opacity-75" />
+                        </Transition.Child>
+
+                        <div className="fixed inset-0 z-40 flex">
+                            <Transition.Child
+                                as={Fragment}
+                                enter="transition ease-in-out duration-300 transform"
+                                enterFrom="-translate-x-full"
+                                enterTo="translate-x-0"
+                                leave="transition ease-in-out duration-300 transform"
+                                leaveFrom="translate-x-0"
+                                leaveTo="-translate-x-full"
+                            >
+                                <Dialog.Panel className="relative flex w-full max-w-xs flex-1 flex-col bg-indigo-700 pt-5 pb-4">
+                                    <Transition.Child
+                                        as={Fragment}
+                                        enter="ease-in-out duration-300"
+                                        enterFrom="opacity-0"
+                                        enterTo="opacity-100"
+                                        leave="ease-in-out duration-300"
+                                        leaveFrom="opacity-100"
+                                        leaveTo="opacity-0"
                                     >
-                                        U
+                                        <div className="absolute top-14 right-0 -mr-12 pt-2">
+                                            <button
+                                                type="button"
+                                                className="ml-1 flex h-10 w-10 items-center justify-center rounded-full focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white"
+                                                onClick={() => setSidebarOpen(false)}
+                                            >
+                                                <span className="sr-only">Close sidebar</span>
+                                                <XMarkIcon className="h-6 w-6 text-white" aria-hidden="true" />
+                                            </button>
+                                        </div>
+                                    </Transition.Child>
+                                    <div className="flex flex-shrink-0 items-center px-4">
+                                        <img
+                                            className="h-8 w-auto"
+                                            src="https://tailwindui.com/img/logos/mark.svg?color=indigo&shade=300"
+                                            alt="Your Company"
+                                        />
                                     </div>
-                                    <div className="ml-2 text-sm font-semibold">user:{user.id}</div>
-                                </button>))}
+                                    <div className="mt-5 h-0 flex-1 overflow-y-auto">
+                                        <nav className="space-y-1 px-2">
+                                            {user.chats.map((chat) => (
+                                                <button
+                                                    key={chat.id}
+                                                    onClick={() => getSelectedChat(chat.chatId)}
+                                                    className="flex flex-row items-center text-indigo-100 hover:bg-indigo-600 rounded-xl p-2"
+                                                >
+                                                    <div
+                                                        className="flex items-center justify-center h-8 w-12 bg-indigo-200 rounded-full"
+                                                    >
+                                                        U
+                                                    </div>
+                                                    <div className="ml-2 text-sm font-semibold">user:{user.id}</div>
+                                                </button>))}
+                                        </nav>
+                                    </div>
+                                </Dialog.Panel>
+                            </Transition.Child>
+                            <div className="w-14 flex-shrink-0" aria-hidden="true">
+                                {/* Dummy element to force sidebar to shrink to fit close icon */}
+                            </div>
+                        </div>
+                    </Dialog>
+                </Transition.Root>
+
+                {/* Static sidebar for desktop */}
+                <div className="hidden md:fixed md:inset-y-0 md:flex md:w-64 md:flex-col h-[90vh]">
+                    {/* Sidebar component, swap this element with another sidebar if you like */}
+                    <div className="flex flex-grow flex-col overflow-y-auto bg-indigo-700 pt-5">
+                        <div className="flex flex-shrink-0 items-center px-4">
+                            <img
+                                className="h-8 w-auto"
+                                src="https://tailwindui.com/img/logos/mark.svg?color=indigo&shade=300"
+                                alt="Your Company"
+                            />
+                        </div>
+                        <div className="mt-5 flex flex-1 flex-col">
+                            <nav className="flex-1 space-y-1 px-2 pb-4">
+                                {user.chats.map((chat) => (
+                                    <button
+                                        key={chat.id}
+                                        onClick={() => getSelectedChat(chat.chatId)}
+                                        className="flex flex-row items-center text-indigo-100 hover:bg-indigo-500 rounded-xl p-2"
+                                    >
+                                        <div
+                                            className="flex items-center justify-center h-8 w-12 bg-indigo-200 rounded-full"
+                                        >
+                                            U
+                                        </div>
+                                        <div className="ml-2 text-sm font-semibold">user:{user.id}</div>
+                                    </button>))}
+                            </nav>
                         </div>
                     </div>
                 </div>
-                {activeChat && <ChatBody chatUsers={chatUsers} messages={messageList} />}
+                <div className="flex flex-1 flex-col md:pl-64">
+                    <button
+                        type="button"
+                        className="border-r border-gray-200 px-4 text-gray-500 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-indigo-500 md:hidden"
+                        onClick={() => setSidebarOpen(true)}
+                    >
+                        <span className="sr-only">Open sidebar</span>
+                        <Bars3BottomLeftIcon className="h-6 w-6" aria-hidden="true" />
+                    </button>
+                    <main>
+                        <div className='h-[90vh]'>
+                            {activeChat && <ChatBody chatUsers={chatUsers} messages={messageList} />}
+                        </div>
+                    </main>
+                </div>
             </div>
-        </div>
-    );
-}
+        </>
+    )
+};
 
-export default Conversation;
 
 export const getServerSideProps: GetServerSideProps = withPageAuth({
     redirectTo: '/',
@@ -105,6 +218,7 @@ export const getServerSideProps: GetServerSideProps = withPageAuth({
         } = await supabase.auth.getUser();
         const logUser = await prisma.user.findFirst({ where: { id: user?.id }, include: { chats: true } })
         const chats = await prisma.chat.findMany({ include: { messages: true, users: true } })
-        return { props: { user: JSON.parse(JSON.stringify(logUser)), chats: JSON.parse(JSON.stringify(chats)) } };
+        const chatUsers = await prisma.user_Chat.findMany({ where: { userId: logUser?.id }, include: { chat: { include: { users: true } } } })
+        return { props: { user: JSON.parse(JSON.stringify(logUser)), chats: JSON.parse(JSON.stringify(chats)), chatUsers: JSON.parse(JSON.stringify(chatUsers)) } };
     }
 });
