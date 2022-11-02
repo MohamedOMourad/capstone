@@ -18,8 +18,8 @@ export default function LoginModel({ open, setOpen }: { open: boolean, setOpen: 
                     <div className="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity" />
                 </Transition.Child>
 
-                <div className="fixed inset-0 z-10 overflow-y-auto">
-                    <div className="flex min-h-full  justify-center p-4 text-center sm:items-center sm:p-0">
+                <div className="fixed inset-0 z-50 top-10 overflow-y-auto h-[95vh]">
+                    <div className="flex min-h-full  justify-center items-center text-center  lg:p-16">
                         <Transition.Child
                             as={Fragment}
                             enter="ease-out duration-300"

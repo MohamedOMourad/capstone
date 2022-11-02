@@ -5,6 +5,7 @@ import { useEffect, useState } from 'react'
 import { useDispatch } from 'react-redux'
 import Advertise from '../components/Advertise'
 import Hero from '../components/Hero'
+import Search from '../components/Search'
 import Tap from '../components/Tap'
 import { prisma } from '../lib/prisma'
 import { useAppDispatch, useAppSelector } from '../redux/app/hooks'
@@ -28,7 +29,7 @@ const Home: NextPage = ({ products }: { products?: Product[] }) => {
   return (
     <>
       <Tap />
-      {/* <Hero /> */}
+      <Hero />
       <Advertise products={filteredProduct!} />
     </>
   )

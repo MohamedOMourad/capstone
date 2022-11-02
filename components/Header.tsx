@@ -51,7 +51,7 @@ export default function Header({ setOpen }: { setOpen: Dispatch<SetStateAction<b
     const user = useUser();
     const { supabaseClient } = useSessionContext();
     return (
-        <>
+        <div className=' sticky top-0 w-screen z-50'>
             <div className="bg-white">
                 <header>
                     <Popover className="relative bg-white">
@@ -278,6 +278,6 @@ export default function Header({ setOpen }: { setOpen: Dispatch<SetStateAction<b
                     </Popover>
                 </header>
             </div>
-        </>
+        </div>
     )
 }

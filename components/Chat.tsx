@@ -4,7 +4,6 @@ import { CheckIcon } from '@heroicons/react/24/outline'
 
 export default function Chat() {
     const [open, setOpen] = useState(true)
-
     return (
         <Transition.Root show={open} as={Fragment}>
             <Dialog as="div" className="relative z-10" onClose={setOpen}>

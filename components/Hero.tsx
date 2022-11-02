@@ -10,7 +10,7 @@ const Hero = () => {
                     <div className="relative  shadow-xl sm:overflow-hidden sm:rounded-2xl">
                         <div
                             style={{ backgroundImage: `url(https://kjwldcclontmioflpfvx.supabase.co/storage/v1/object/public/img/lucrezia-carnelos-wQ9VuP_Njr4-unsplash.jpg)` }}
-                            className="flex items-center justify-center bg-cover  bg-bottom w-full h-[82vh]">
+                            className="flex items-center justify-center bg-cover  bg-fixed bg-bottom w-full h-[82vh]">
                             <div >
                                 <h1 className="text-center  text-4xl font-bold tracking-tight sm:text-5xl lg:text-8xl">
                                     <span className="block text-white">Take control of your</span>

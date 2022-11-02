@@ -33,7 +33,7 @@ const ChatBody = ({ messages, chatUsers }: { messages: Message[], chatUsers: Use
         <div className="flex flex-col flex-auto h-full p-6">
             <div className="flex flex-col flex-auto flex-shrink-0 rounded-2xl bg-gray-100 h-full p-4">
                 {/* chat body */}
-                <div className="flex flex-col h-full overflow-x-auto mb-4">
+                <div className="flex flex-col h-full overflow-x-auto pb-4">
                     <div className="flex flex-col h-full">
                         {messages.map((message, i) => (
                             <div key={i} className="grid grid-cols-12 gap-y-2">
@@ -74,7 +74,6 @@ const ChatBody = ({ messages, chatUsers }: { messages: Message[], chatUsers: Use
                 </div>
                 {/* send message */}
                 <div className="flex flex-row items-center h-16 rounded-xl bg-white w-full px-4">
-
                     <div className="flex-grow ml-4">
                         <div className="relative w-full">
                             <input
